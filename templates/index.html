@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Go Tours</title>
+        <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/css/style.css">
+        <link rel="stylesheet" href="../static/css/fontawesome.min.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/normalize.css" />
+
+		<link rel="stylesheet" type="text/css" href="../static/css/input/demo.css" />
+		<link rel="stylesheet" type="text/css" href="../static/css/input/component.css" />
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
+        <style>
+           input[type="submit"] {
+                font-size: 16px;
+                border: none;
+                padding: 5px;
+                background-color: #8ca6bf;
+                color: white;
+            }
+           a,input,table{
+               font-weight: 600;
+               font-size: 16px;
+               line-height: 35px;
+           }
+           h2{
+               font-weight: 600;
+               font-size: 20px;
+               color: #444;
+           }
+        </style>
+    </head>
+    <body style="background: none">
+<!--  Navigation  -->
+    <div class="nav">
+      <div class="container">
+        <div class="menu fhNav">
+            <ul class="inner-nav clear">
+              <li class="selectedNav"><a href="{{ url_for('add_place') }}" title="Add Place">Main</a></li>
+              <li><a href="{{ url_for('analysis') }}" title="Data Analysis">Data Analysis</a></li>
+            </ul>
+        </div>
+      </div>
+    </div>
+    <section class="w3l-inner-banner-main">
+        <div class="about-inner about editContent">
+            <div class="container">
+            <div class="breadcrumbs-sub">
+                <ul class="breadcrumbs-custom-path">
+                    <li class="right-side propClone"><a href="{{ url_for('add_place') }}" class="editContent">Home <span class="fa fa-angle-right" aria-hidden="true"></span></a> <p></li>
+                    <li class="active editContent" style="color: #cecdcd">Add Places</li>
+                </ul>
+            </div>
+			</div>
+		</div>
+    </section>
+
+<!--Add Places-->
+    <div class="contact" id="add_place_div">
+        <div class="container">
+<!--            {% for message in get_flashed_messages(with_categories=True) %}-->
+<!--            <div class="alert alert-{{ message[0] }}">-->
+<!--                <button type="button" class="close" data-dismiss="alert">&times;</button>-->
+<!--                {{ message[1] }}-->
+<!--            </div>-->
+<!--            {%  endfor %}-->
+
+            <div class="alert" id="message">
+            </div>
+            <div class="contact-form">
+                <form action="/add_place" method="post">
+                    <section class="content bgcolor-8">
+                        <span class="input input--isao">
+                            <input class="input__field input__field--isao" type="text" id="username1" name="username1" required />
+                            <label class="input__label input__label--isao" for="username1">
+                                <span class="input__label-content input__label-content--isao">User Name</span>
+                            </label>
+                        </span>
+                        <span class="input input--isao">
+                            <input class="input__field input__field--isao" type="text" id="placename" name="placename" required/>
+                            <label class="input__label input__label--isao" for="placename">
+                                <span class="input__label-content input__label-content--isao">Place</span>
+                            </label>
+                        </span>
+                        <span class="input input--isao">
+                            <input class="input__field input__field--isao" type="text" id="country" name="country" required />
+                            <label class="input__label input__label--isao" for="country">
+                                <span class="input__label-content input__label-content--isao">Country</span>
+                            </label>
+                        </span>
+                        <span class="input input--isao">
+                            <input class="input__field input__field--isao" type="text" id="weather" name="weather" required/>
+                            <label class="input__label input__label--isao" for="weather">
+                                <span class="input__label-content input__label-content--isao">Weather</span>
+                            </label>
+                        </span>
+                        <span class="input input--isao" style="width: 76%">
+                            <p style="text-align: left;color: #8ca6bf;font-weight: bold;font-size: 70.25%;padding: 0">Description</p>
+                            <textarea style="border: none; background-color: #EFEEEE;width: 100%;color: #6a7989" id='description' name="description" required></textarea>
+                        </span>
+                        <input type="submit" value="SUBMIT" id="add_place">
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!--View Places-->
+<section class="w3l-covers-18 w3l-call-to-action_9">
+        <div class="covers-main editContent">
+            <div class="container">
+                <form action="/view_places" method="post" class="booking-form" style="margin-bottom: 20px">
+                    <div class="row book-form">
+                        <div class="form-input col-md-2" >
+                                                <label>Country</label>
+                                                <select name="filter_country" id="filter_country" class="selectpicker">
+                                                    <option value="">Any</option>
+                                                </select>
+                        </div>
+
+                        <div class="form-input col-md-2">
+                                    <label>Weather</label>
+                                    <select name="filter_weather" id="filter_weather" class="selectpicker">
+                                        <option value="">Any</option>
+                                    </select>
+
+                        </div>
+
+                        <div class="bottom-btn col-md-2" id='filter_submit' style="margin-top: 0">
+                                    <label>Submit</label>
+                                    <button class="btn btn-style btn-primary w-100 btn-style"style="height: 50px;background-color: #8ca6bf;border: none">Submit</button>
+                        </div>
+            </div>
+        </form>
+                <div id='filtered-results' class="gallery-image row">
+<!--                    {% for place in filtered_places %}-->
+<!--                    <div class="img-box">-->
+<!--                        <div class="col-lg-4 col-md-6 top-top">-->
+<!--                        <h5 class="my-2"><a href="#">{{ place.name }}</a></h5>-->
+<!--                        <div class="blog-date">-->
+<!--                            <p class="pos-date text-right"><span class="fa fa-users mr-1"></span>Voted People : 5</p>-->
+<!--                        </div>-->
+<!--                        <p class="para">{{ place.description }}</p>-->
+<!--                        <div class="top-gap">-->
+<!--                            <h5>More</h5>-->
+<!--                            <a href="#url" class="icon text-center"><span class="fa fa-chevron-right"></span></a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    {% endfor %}-->
+                  </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!--Vote -->
+    <div class="contact" id="contact">
+        <div class="container">
+             {% for message in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{ message[0] }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message[1] }}
+            </div>
+            {% endfor %}
+
+            <div class="contact-form">
+                <form action="/vote" method="post">
+                    <section class="content">
+                        <span class="input input--isao">
+                            <input class="input__field input__field--isao" type="text" id="username3" name="user_name" required />
+                            <label class="input__label input__label--isao" for="username3">
+                                <span class="input__label-content input__label-content--isao">User Name</span>
+                            </label>
+                        </span>
+                        <span class="input input--isao">
+                            <label class="headline">Place</label>
+                                <select name="voted_place" id='voted_place' class="selectpicker">
+                                    <option value="">Any</option>
+                                </select>
+                        </span>
+                        <span class="input input--isao">
+                            <p style="text-align: left;color: #8ca6bf;font-weight: bold;font-size: 70.25%;padding: 0">Feedback</p>
+                            <textarea style="border: none; background-color: #EFEEEE;width: 100%;color: #6a7989"  name="feedback" required></textarea>
+                        </span>
+                        <input type="submit" value="VOTE">
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<!--View History-->
+    <section class="content view_history_div">
+    <div class="container" style="margin-top: 30px;margin-bottom: 30px">
+    {% for message in get_flashed_messages(with_categories=True) %}
+            <div class="alert alert-{{ message[0] }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message[1] }}
+            </div>
+    {%  endfor %}
+        <form action="/history" method="post">
+                <input type="text" placeholder="User Name" name="username2" id="username2" required>
+                <input class="btn btn-style btn-primary btn-style" id='history' type="submit" style="margin-left: 20px;width: 100px" value="Search">
+        </form>
+  <h2 style="margin-top: 30px">History</h2>
+
+        <div id="history_table"></div>
+
+</div>
+    </section>
+
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('add_place').addEventListener('click', function(event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+            const formDataString = `username1=${encodeURIComponent(document.getElementById('username1').value)}&` +
+                `place=${encodeURIComponent(document.getElementById('placename').value)}&` +
+                `country=${encodeURIComponent(document.getElementById('country').value)}&` +
+                `weather=${encodeURIComponent(document.getElementById('weather').value)}&` +
+                `description=${encodeURIComponent(document.getElementById('description').value)}`;
+
+            fetch('/add_place', {
+                method: 'POST',
+                body: formDataString,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        document.getElementById('message').textContent = "Place added successfully";
+                        updateCountrySelect();
+                        updateWeatherSelect();
+                        updatePlaceSelect();
+                    }
+                    if (data.error) {
+                        document.getElementById('message').textContent = "Error: ";
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+
+             document.addEventListener('DOMContentLoaded', function() {
+
+    });
+        })
+    </script>
+<script>
+
+            $("#history").click(function(event){
+                event.preventDefault();
+                var username = $("#username2").val();
+                console.log(username)
+                $.ajax({
+                    type:'POST',
+                    url: "/history",
+                    data: {username2: username},
+                    success: function(response) {
+                        var tableHTML = '<table class="table" style="background: #ededed">' +
+                                        '<thead>' +
+                                        '<tr>' +
+                                        '<th>Place</th>' +
+                                        '<th>Feedback</th>' +
+                                        '</tr>' +
+                                        '</thead>' +
+                                        '<tbody>';
+
+                        if(response.history_records && response.history_records.length > 0) {
+                            response.history_records.forEach(function(record) {
+                                tableHTML += '<tr>' +
+                                             '<td>' + record[0] + '</td>' +
+                                             '<td>' + record[1] + '</td>' +
+                                             '</tr>';
+                            });
+                        } else {
+                            tableHTML += '<tr>' +
+                                         '<td colspan="2">No history records found.</td>' +
+                                         '</tr>';
+                        }
+
+                        tableHTML += '</tbody></table>';
+
+                        $("#history_table").html(tableHTML);
+                    }
+                });
+})
+    </script>
+<script>
+// Function to update the list of locations
+function updateLocations() {
+    const filter_country = $('#filter_country').val();
+    const filter_weather = $('#filter_weather').val();
+    // Make an AJAX request to get the updated list of locations
+    $.ajax({
+        type: 'POST', // Use GET request to retrieve all locations
+        url: '/view_places', // Create a new route to get all locations
+        data: {
+            filter_country: filter_country,
+            filter_weather: filter_weather
+        },
+        success: function (data) {
+            // Find the container where you want to append the filtered places
+            const $container = $('#filtered-results');
+
+            // Clear the container to remove any existing content
+            $container.empty();
+
+            // Iterate through the filtered places and append them to the container
+            data.forEach(function (place) {
+                const $placeElement = $('<div class="img-box">' +
+                    '<div class="col-lg-4 col-md-6 top-top">' +
+                    '<h5 class="my-2"><a href="#">' + place.name + '</a></h5>' +
+                    '<div class="blog-date">' +
+                    '<p class="pos-date text-right"><span class="fa fa-users mr-1"></span>Voted People : 5</p>' +
+                    '</div>' +
+                    '<p class="para">' + place.description + '</p>' +
+                    '<div class="top-gap">' +
+                    '<h5>More</h5>' +
+                    '<a href="#url" class="icon text-center"><span class="fa fa-chevron-right"></span></a>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>');
+
+                // Append the place element to the container
+                $container.append($placeElement);
+            });
+        }
+    });
+}
+
+// Listen for changes in filter values
+$('#filter_submit').on('submit', function () {
+    e.preventDefault();
+    updateLocations();
+});
+
+</script>
+<script>
+function updateCountrySelect() {
+    fetch('/country')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('filter_country');
+            let first = true;
+            while (select.children.length > 1) {
+                if (!first) {
+                    select.removeChild(select.lastChild);
+                } else {
+                    first = false;
+                }
+            }
+            data.forEach(country => {
+                const option = document.createElement('option');
+                option.value = country;
+                option.textContent = country;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching weathers:', error));
+}
+document.addEventListener('DOMContentLoaded', function() {
+        updateCountrySelect();
+});
+
+function updateWeatherSelect() {
+        fetch('/weather')
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('filter_weather');
+                let first = true;
+            while (select.children.length > 1) {
+                if (!first) {
+                    select.removeChild(select.lastChild);
+                } else {
+                    first = false;
+                }
+            }
+                data.forEach(weather => {
+                    const option = document.createElement('option');
+                    option.value = weather;
+                    option.textContent = weather;
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching countries:', error));
+    }
+document.addEventListener('DOMContentLoaded', function() {
+        updatePlaceSelect();
+});
+
+function updatePlaceSelect() {
+    fetch('/places')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('voted_place');
+            let first = true;
+            while (select.children.length > 1) {
+                if (!first) {
+                    select.removeChild(select.lastChild);
+                } else {
+                    first = false;
+                }
+            }
+            data.forEach(place => {
+                const option = document.createElement('option');
+                option.value = place;
+                option.textContent = place;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Error fetching weathers:', error));
+}
+document.addEventListener('DOMContentLoaded', function() {
+        updatePlaceSelect();
+});
+</script>
+    </body>
+</html>

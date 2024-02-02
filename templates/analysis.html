@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Go Tours</title>
+        <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../static/css/style.css">
+        <link rel="stylesheet" href="../static/css/fontawesome.min.css">
+        <link rel="stylesheet" href="../static/css/index.css" />
+        <link rel="stylesheet" type="text/css" href="../static/css/map/style.css" />
+        <script src="http://www.jq22.com/jquery/jquery-1.7.1.js"></script>
+        <script type="text/javascript" src="../static/js/map/raphael-min.js"></script>
+        <script type="text/javascript" src="../static/js/map/worldMapConfig.js"></script>
+        <script type="text/javascript" src="../static/js/map/map.js"></script>
+
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
+{#    <script type="text/javascript">#}
+{#        $(function(){#}
+{#            $('#WorldMap').SVGMap({#}
+{##}
+{#                mapName: 'world',#}
+{##}
+{#                mapWidth: 600,#}
+{##}
+{#                mapHeight: 400#}
+{#            });#}
+{#        });#}
+{#    </script>#}
+<style>
+    #Item9{
+    position: absolute;
+    top: 100px;
+    left: 0px;
+    z-index: 5;
+    height: 10.125rem;
+    width: 100%;
+    }
+
+    .stateTip{
+        z-index: 10;
+    }
+
+    h2{
+        background-color: transparent;
+    }
+</style>
+    </head>
+    <body style="background: #06164A">
+
+    <div class="nav">
+      <div class="container">
+        <div class="menu fhNav">
+            <ul class="inner-nav clear">
+              <li><a href="{{ url_for('main') }}" title="Homepage">Homepage</a></li>
+              <li><a href="{{ url_for('add_place') }}" title="Add Place">Add Place</a></li>
+              <li><a href="{{ url_for('view_places') }}" title="View Places">View Places</a></li>
+              <li><a href="{{ url_for('vote') }}" title="Vote & Feedback">Vote & Feedback</a></li>
+              <li><a href="{{ url_for('history') }}" title="View History">View History</a></li>
+              <li class="selectedNav"><a href="{{ url_for('analysis') }}" title="Data Analysis">Data Analysis</a></li>
+            </ul>
+        </div>
+      </div>
+    </div>
+
+     <header>
+    <div class="showTime">Current Time：<span></span></div>
+  </header>
+  <section class="mainbox">
+    <div class="column">
+      <div class="panel bar">
+        <h2>
+          柱状图-各行业程序员数量 <a href="javascript:;">2019</a>
+          <a href="javacript:;"> 2020</a>
+        </h2>
+        <div class="chart"></div>
+        <div class="panel-footer"></div>
+      </div>
+      <div class="panel line">
+        <h2>折线图-学习变化</h2>
+        <div class="chart"></div>
+        <div class="panel-footer"></div>
+      </div>
+      <div class="panel pie">
+        <h2>饼形图-工程师年龄分布</h2>
+        <div class="chart"></div>
+        <div class="panel-footer"></div>
+      </div>
+    </div>
+    <div class="column">
+      <div class="no">
+        <div class="no-hd">
+          <ul>
+            <li>125811</li>
+            <li>104563</li>
+          </ul>
+        </div>
+        <div class="no-bd">
+          <ul>
+            <li>程序员需求人数</li>
+            <li>程序员供应人数</li>
+          </ul>
+        </div>
+      </div>
+      <div class="map">
+          <div class="items" id="Item9">
+          <a href="javascript:;" class="fold"></a>
+            <div class="itemCon">
+              <div id="WorldMap"></div>
+            </div>
+        </div>
+        <div class="map1"></div>
+        <div class="map2"></div>
+        <div class="map3"></div>
+        <link rel="stylesheet" type="text/css" href="../static/css/map/SyntaxHighlighter.css">
+        <script type="text/javascript" src="../static/js/map/SyntaxHighlighter.js"></script>
+      </div>
+
+    </div>
+    <div class="column">
+      <div class="panel bar1">
+        <h2>柱状图-开发技能</h2>
+        <div class="chart"></div>
+        <div class="panel-footer"></div>
+      </div>
+      <div class="panel line1">
+        <h2>折线图-公司人员流动</h2>
+        <div class="chart"></div>
+        <div class="panel-footer"></div>
+      </div>
+      <div class="panel pie1">
+        <h2>饼形图-各地区程序员占比</h2>
+        <div class="chart"></div>
+        <div class="panel-footer"></div>
+      </div>
+    </div>
+  </section>
+
+  <script src="../static/js/map/flexible.js"></script>
+ <script src="https://www.jq22.com/jquery/echarts-4.2.1.min.js"></script>
+  <script src="../static/js/map/index.js"></script>
+
+  <script>
+    (function (fn) {
+      fn();
+      setInterval(fn, 1000);
+    })(function () {
+     var dt = new Date();
+      document.querySelector(".showTime span").innerHTML =
+        dt.getHours() + ":" +
+        dt.getMinutes() + ":" +
+        dt.getSeconds();
+    });
+  </script>
+
+    <script>
+        var data = {"CN":{"value":"30.05%","index":"1","stateInitColor":"0"},"IN":{"value":"19.77%","index":"2","stateInitColor":"0"}}
+        var i = 1;
+
+
+        var mapObj_1 = {};
+
+        var stateColorList = ['003399', '0058B0', '0071E1', '1C8DFF', '51A8FF', '82C0FF', 'AAD5FF'];
+
+
+
+        $('#WorldMap').SVGMap({
+
+            external: mapObj_1,
+            mapName: 'world',
+            mapWidth: 600,
+            mapHeight: 400,
+            stateData: data,
+
+
+            stateTipHtml: function (mapData, obj) {
+
+                var _value = mapData[obj.id].value;
+
+                var _idx = mapData[obj.id].index;
+
+                var active = '';
+
+                _idx < 4 ? active = 'active' : active = '';
+
+                var tipStr = '<div class="mapInfo"><i class="' + active + '">' + _idx + '</i><span>' + obj.name + '</span><b>' + _value + '</b></div>';
+
+                return tipStr;
+
+            }
+
+        });
+
+
+
+
+    </script>
+    </body>
