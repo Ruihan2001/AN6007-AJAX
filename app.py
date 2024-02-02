@@ -53,17 +53,34 @@ def view_places():
         filter_country = request.form.get('filter_country')
         filter_weather = request.form.get('filter_weather')
 
-        # print(filter_country)
-        match_index = model.binary_search_all(place_list, filter_country, filter_weather)
-        match_index.sort()
-        print("okk",match_index)
-        filtered_places = []
-        for i in match_index:
-            filtered_places.append(place_list[i])
+        if filter_country in [None, '', 'Any']:
+            filter_country = None
+        if filter_weather in [None, '', 'Any']:
+            filter_weather = None
 
 
-        return jsonify(filtered_places=filtered_places)
-    return render_template("view_places.html", filtered_places=place_list)
+            model.quickSort2(place_list, 0, len(place_list) - 1, key=lambda x: (x.country.lower(), x.weather.lower()))
+
+
+            if filter_country is None and filter_weather is None:
+                filtered_places = place_list
+            else:
+                filtered_places = []
+                if filter_country and filter_weather:
+                    filtered_places = model.binary_search_places(place_list, filter_country, filter_weather, 0,
+                                                                 len(place_list) - 1)
+                elif filter_country:
+
+                    filtered_places = model.binary_search_places(place_list, filter_country, '', 0, len(place_list) - 1)
+                elif filter_weather:
+                    filtered_places = model.binary_search_places(place_list, '', filter_weather, 0, len(place_list) - 1)
+
+
+            places_info = [f"{place.name},{place.country},{place.weather},{place.description},{place.total_votes},{place.all_feedback}" for place in filtered_places]
+            return jsonify(places_info)
+        else:
+
+            return jsonify([])
 
 
 @app.route('/history',methods=['GET','POST'])

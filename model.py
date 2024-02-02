@@ -52,7 +52,48 @@ def findUserHistory(username):
         history_records.append((i.place_name,i.feedback))
     return history_records
 
-get_string = lambda place: place.country + place.weather
+def partition2(array, low, high, key=lambda x: x):
+    pivot = key(array[high])
+    i = low - 1
+    for j in range(low, high):
+        if key(array[j]) <= pivot:
+            i = i + 1
+            array[i], array[j] = array[j], array[i]
+    array[i + 1], array[high] = array[high], array[i + 1]
+    return i + 1
+
+def quickSort2(array, low, high, key=lambda x: x):
+    if low < high:
+        pi = partition2(array, low, high, key)
+        quickSort2(array, low, pi - 1, key)
+        quickSort2(array, pi + 1, high, key)
+
+
+def binary_search_places(places, target_country, target_weather, low, high):
+
+    quickSort2(places, 0, len(places) - 1, key=lambda x: (x.country.lower(), x.weather.lower()))
+
+    if low > high:
+        return []
+
+    mid = (low + high) // 2
+    if places[mid].country.lower() == target_country.lower() and places[mid].weather.lower() == target_weather.lower():
+        results = [places[mid]]
+        # 向左查找所有匹配项
+        left = mid - 1
+        while left >= low and places[left].country.lower() == target_country.lower() and places[left].weather.lower() == target_weather.lower():
+            results.insert(0, places[left])
+            left -= 1
+        # 向右查找所有匹配项
+        right = mid + 1
+        while right <= high and places[right].country.lower() == target_country.lower() and places[right].weather.lower() == target_weather.lower():
+            results.append(places[right])
+            right += 1
+        return results
+    elif (places[mid].country.lower(), places[mid].weather.lower()) < (target_country.lower(), target_weather.lower()):
+        return binary_search_places(places, target_country, target_weather, mid + 1, high)
+    else:
+        return binary_search_places(places, target_country, target_weather, low, mid - 1)
 
 
 def binary_search_all(data, country, weather):
@@ -72,36 +113,6 @@ def binary_search_all(data, country, weather):
 
     binary_search_recursive(0, len(data) - 1)
     return result_indices
-# def binary_search_all(data, country, weather):
-#         result_indices = []
-#         sorted_data = quickSort(data, 0, len(data) - 1, get_string)
-#         print("Hi",sorted_data)
-#         def binary_search_recursive(start, end):
-#             if start > end:
-#                 return
-#
-#             mid = (start + end) // 2
-#             mid_value = get_string(sorted_data[mid])
-#
-#             if mid_value == country + weather:
-#                 result_indices.append(mid)
-#                 # 向左搜索更多匹配项
-#                 left = mid - 1
-#                 while left >= start and get_string(sorted_data[left]) == mid_value:
-#                     result_indices.append(left)
-#                     left -= 1
-#                 # 向右搜索更多匹配项
-#                 right = mid + 1
-#                 while right <= end and get_string(sorted_data[right]) == mid_value:
-#                     result_indices.append(right)
-#                     right += 1
-#             elif mid_value < country + weather:
-#                 binary_search_recursive(mid + 1, end)
-#             else:
-#                 binary_search_recursive(start, mid - 1)
-#
-#         binary_search_recursive(0, len(sorted_data) - 1)
-#         return result_indices
 
 def filterPlaces():
     places = [

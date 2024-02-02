@@ -129,9 +129,9 @@
 
                         </div>
 
-                        <div class="bottom-btn col-md-2" id='filter_submit' style="margin-top: 0">
+                        <div class="bottom-btn col-md-2"  style="margin-top: 0">
                                     <label>Submit</label>
-                                    <button class="btn btn-style btn-primary w-100 btn-style"style="height: 50px;background-color: #8ca6bf;border: none">Submit</button>
+                                    <button class="btn btn-style btn-primary w-100 btn-style"id='filter_submit' style="height: 50px;background-color: #8ca6bf;border: none">Submit</button>
                         </div>
             </div>
         </form>
@@ -291,53 +291,53 @@
 })
     </script>
 <script>
-// Function to update the list of locations
-function updateLocations() {
-    const filter_country = $('#filter_country').val();
-    const filter_weather = $('#filter_weather').val();
-    // Make an AJAX request to get the updated list of locations
-    $.ajax({
-        type: 'POST', // Use GET request to retrieve all locations
-        url: '/view_places', // Create a new route to get all locations
-        data: {
-            filter_country: filter_country,
-            filter_weather: filter_weather
+   function fetchAndDisplayPlaces(country = 'Any', weather = 'Any') {
+       event.preventDefault();
+    fetch('/view_places', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
-        success: function (data) {
-            // Find the container where you want to append the filtered places
-            const $container = $('#filtered-results');
+        body: `filter_country=${country}&filter_weather=${weather}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        const $container = $('#filtered-results');
+        $container.empty(); // 清空现有内容
 
-            // Clear the container to remove any existing content
-            $container.empty();
-
-            // Iterate through the filtered places and append them to the container
-            data.forEach(function (place) {
-                const $placeElement = $('<div class="img-box">' +
-                    '<div class="col-lg-4 col-md-6 top-top">' +
-                    '<h5 class="my-2"><a href="#">' + place.name + '</a></h5>' +
-                    '<div class="blog-date">' +
-                    '<p class="pos-date text-right"><span class="fa fa-users mr-1"></span>Voted People : 5</p>' +
-                    '</div>' +
-                    '<p class="para">' + place.description + '</p>' +
-                    '<div class="top-gap">' +
-                    '<h5>More</h5>' +
-                    '<a href="#url" class="icon text-center"><span class="fa fa-chevron-right"></span></a>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>');
-
-                // Append the place element to the container
-                $container.append($placeElement);
-            });
-        }
-    });
+        data.forEach(function (placeStr) {
+            const placeDetails = placeStr.split(',');
+            const $placeElement = $(`<div class="img-box">
+                <div class="col-lg-4 col-md-6 top-top">
+                <h5 class="my-2"><a href="#">${placeDetails[0]}</a></h5>
+                <div class="blog-date">
+                    <p class="pos-date text-right"><span class="fa fa-users mr-1"></span>Voted People ${placeDetails[4]}</p>
+                </div>
+                <p class="para">${placeDetails[3]}</p>
+                <div class="top-gap">
+                    <h5>More</h5>
+                    <a href="#url" class="icon text-center"><span class="fa fa-chevron-right"></span></a>
+                </div>
+                </div>
+                </div>`);
+            $container.append($placeElement);
+        });
+    })
+    .catch(error => console.error('Error:', error));
 }
 
-// Listen for changes in filter values
-$('#filter_submit').on('submit', function () {
-    e.preventDefault();
-    updateLocations();
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetchAndDisplayPlaces();
 });
+
+
+document.getElementById('filter_submit').addEventListener('click', function() {
+    const country = document.getElementById('filter_country').value;
+    const weather = document.getElementById('filter_weather').value;
+    fetchAndDisplayPlaces(country, weather); // 根据筛选条件获取并展示地点
+});
+
 
 </script>
 <script>
