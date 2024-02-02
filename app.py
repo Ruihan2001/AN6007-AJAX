@@ -38,7 +38,6 @@ def get_countries():
 def get_weathers():
     all_weathers = list(set(place.weather for place in place_list))
     all_weathers.sort()
-    print(all_weathers)
     return jsonify(all_weathers)
 
 @app.route('/places')
@@ -50,49 +49,47 @@ def get_places():
 @app.route('/view_places', methods=['GET', 'POST'])
 def view_places():
     if request.method == 'POST':
-        filter_country = request.form.get('filter_country')
-        filter_weather = request.form.get('filter_weather')
+        filter_country = request.form.get('filter_country','Any')
+        filter_weather = request.form.get('filter_weather','Any')
 
         if filter_country in [None, '', 'Any']:
             filter_country = None
         if filter_weather in [None, '', 'Any']:
             filter_weather = None
 
-
-            model.quickSort2(place_list, 0, len(place_list) - 1, key=lambda x: (x.country.lower(), x.weather.lower()))
-
-
-            if filter_country is None and filter_weather is None:
-                filtered_places = place_list
-            else:
-                filtered_places = []
-                if filter_country and filter_weather:
-                    filtered_places = model.binary_search_places(place_list, filter_country, filter_weather, 0,
-                                                                 len(place_list) - 1)
-                elif filter_country:
-
-                    filtered_places = model.binary_search_places(place_list, filter_country, '', 0, len(place_list) - 1)
-                elif filter_weather:
-                    filtered_places = model.binary_search_places(place_list, '', filter_weather, 0, len(place_list) - 1)
-
-
-            places_info = [f"{place.name},{place.country},{place.weather},{place.description},{place.total_votes},{place.all_feedback}" for place in filtered_places]
-            return jsonify(places_info)
+        if filter_country is None and filter_weather is None:
+            print('00')
+            filtered_places = place_list
+            # 问题在这 place_list都是空的，当然找不到
+            print(place_list)
+            print(filtered_places)
         else:
+            filtered_places = []
+            if filter_country and filter_weather:
+                print('1')
+                filtered_places = model.binary_search_places(place_list, filter_country, filter_weather, 0,
+                                                             len(place_list) - 1)
+            elif filter_country:
+                print('2')
+                filtered_places = model.binary_search_places(place_list, filter_country, '', 0, len(place_list) - 1)
 
-            return jsonify([])
+            elif filter_weather:
+                print('3')
+                filtered_places = model.binary_search_places(place_list, '', filter_weather, 0, len(place_list) - 1)
+                print(filtered_places)
+
+        places_info = [f"{place.name},{place.country},{place.weather},{place.description},{place.total_votes},{place.all_feedback}" for place in filtered_places]
+        return jsonify(places_info)
+    else:
+        return jsonify([])
 
 
 @app.route('/history',methods=['GET','POST'])
 def history():
     if request.method == 'POST':
         user_name = request.form.get('username2')
-        print(user_name)
-        print(type(user_name))
         history_records = model.findUserHistory(str(user_name))
-        print("1",history_records)
         if history_records:
-            print("2",history_records)
             return jsonify(history_records=history_records)
         else:
             flash('No related results! Please enter the correct username or re-vote!', 'danger')

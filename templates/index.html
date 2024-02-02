@@ -238,6 +238,7 @@
                         updateCountrySelect();
                         updateWeatherSelect();
                         updatePlaceSelect();
+                        fetchAndDisplayPlaces();
                     }
                     if (data.error) {
                         document.getElementById('message').textContent = "Error: ";
@@ -293,6 +294,7 @@
 <script>
    function fetchAndDisplayPlaces(country = 'Any', weather = 'Any') {
        event.preventDefault();
+
     fetch('/view_places', {
         method: 'POST',
         headers: {
