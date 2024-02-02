@@ -18,13 +18,13 @@ class Place:
         self.all_feedback = []
 
 
-userdata = []
-ruihan = User('ruihan')
-ruihan.linked_places.append(UserLinkedPlace('Chengdu', 'delicious'))
-ruiyang = User('ruiyang')
-ruihan.linked_places.append(UserLinkedPlace('Hongkong', 'Expensive'))
-userdata.append(ruihan)
-userdata.append(ruiyang)
+# userdata = []
+# ruihan = User('ruihan')
+# ruihan.linked_places.append(UserLinkedPlace('Chengdu', 'delicious'))
+# ruiyang = User('ruiyang')
+# ruihan.linked_places.append(UserLinkedPlace('Hongkong', 'Expensive'))
+# userdata.append(ruihan)
+# userdata.append(ruiyang)
 
 
 class Place:
@@ -190,17 +190,23 @@ def binary_search(arr, low, high, x, key = lambda x:x if not isinstance(x, str) 
     else:
         return -1
     
-# if __name__ == '__main__':
-#     userdata = []
-#     ruihan = User('ruihan')
-#     ruihan.linked_places.append(UserLinkedPlace('Chengdu','delicious'))
-#     ruiyang = User('ruiyang')
-#     ruihan.linked_places.append(UserLinkedPlace('Hongkong','Expensive'))
-#     userdata.append(ruihan)
-#     userdata.append(ruiyang)
-#
-#
-#     print(findUserHistory('ruihan'))
-#     # print(findUserHistory('yubin'))
+if __name__ == '__main__':
+    userdata = []
+    ruihan = User('ruihan')
+    ruihan.linked_places.append(UserLinkedPlace('Chengdu','delicious'))
+    ruiyang = User('ruiyang')
+    ruihan.linked_places.append(UserLinkedPlace('Hongkong','Expensive'))
+    userdata.append(ruihan)
+    userdata.append(ruiyang)
+    place1 = Place('1','2','3','4')
+    place2 = Place('5', '6', '7', '8')
+    places=[]
+    places.append(place1)
+    places.append(place2)
+    print(places)
+    print(binary_search_places(places, target_country='2', target_weather='Any',low = 0,high=len(places)-1))
+
+    # print(findUserHistory('ruihan'))
+    # print(findUserHistory('yubin'))
 
     
