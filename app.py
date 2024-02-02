@@ -41,7 +41,6 @@ def get_weathers():
     print(all_weathers)
     return jsonify(all_weathers)
 
-
 @app.route('/places')
 def get_places():
     all_places = list(set(place.name for place in place_list))
