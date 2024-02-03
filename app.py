@@ -7,6 +7,10 @@ app.secret_key = 'Grh@20010321'
 def index():
     return render_template("index.html")
 
+def read_list():
+
+
+
 place_list = []
 @app.route('/add_place', methods=['GET','POST'])
 def add_place():
@@ -25,6 +29,7 @@ def add_place():
 
         new_place = model.Place(place, country, weather, description)
         place_list.append(new_place)
+        model.update_places_file(place_list)
         return jsonify(success = 'Success!')
         # flash("Place added successfully",'success')
 
@@ -82,6 +87,8 @@ def view_places():
         return jsonify(places_info)
     else:
         return jsonify([])
+
+# update_vote_history_file(remark)
 
 
 @app.route('/history',methods=['GET','POST'])
