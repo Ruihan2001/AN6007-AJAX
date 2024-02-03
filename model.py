@@ -144,11 +144,16 @@ def filterPlaces():
 
 # Vote
 def createVote(user_name,voted_place,feedback):
-    User_name = User(user_name)
-    # print(User_name.username)
-    User_name.linked_places.append(UserLinkedPlace(voted_place, feedback))
-    userdata.append(User_name)
-    # print(user_name,voted_place,feedback)
+    existing_user = next((user for user in userdata if user.username == user_name), None)
+
+    if existing_user:
+        existing_user.linked_places.append(UserLinkedPlace(voted_place, feedback))
+    else:
+
+        new_user = User(user_name)
+        new_user.linked_places.append(UserLinkedPlace(voted_place, feedback))
+        userdata.append(new_user)
+
     return 'ok'
 
 def findUserVoteHistory(username, voted_place_name):
@@ -171,15 +176,11 @@ def findUserVoteHistory(username, voted_place_name):
 def binary_search_new(arr, low, high, x, key=lambda x: x):
     if high >= low:
         mid = (high + low) // 2
-        # 直接比较目标x与通过key函数获取的中间元素的值
-        print(key(arr[mid]))
         if key(arr[mid]) == x:
             return mid
         elif key(arr[mid]) > x:
-            print(key(arr[mid]))
             return binary_search_new(arr, low, mid - 1, x, key)
         else:
-            print(key(arr[mid]))
             return binary_search_new(arr, mid + 1, high, x, key)
     else:
         return -1

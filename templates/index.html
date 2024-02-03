@@ -252,13 +252,12 @@
     })
 </script>
 <script>
+
     document.getElementById('vote').addEventListener('click', function(event) {
         event.preventDefault(); // 阻止表单默认提交行为
-        const selectedOption = document.getElementById('voted_place').options[document.getElementById('voted_place').selectedIndex];
 
-
-        const selectedValue = selectedOption.value;
-        const selectedText = selectedOption.text;
+        const voteButton = document.getElementById('vote');
+        voteButton.disabled = true;
 
         const formDataString = `username3=${encodeURIComponent(document.getElementById('username3').value)}&` +
             `votedplace=${encodeURIComponent(document.getElementById('voted_place').value)}&` +
@@ -275,21 +274,17 @@
             .then(data => {
                 console.log(data);
                 if (data.success) {
-                    document.getElementById('message2').textContent = "Place added successfully";
-                    updateCountrySelect();
-                    updateWeatherSelect();
-                    updatePlaceSelect();
-                    fetchAndDisplayPlaces();
+                    document.getElementById('message2').textContent = "Vote successfully";
                 }
                 if (data.error) {
                     document.getElementById('message2').textContent = "Error: ";
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error:', error))
+            .finally(() => {
+                voteButton.disabled = false;
+            });
 
-         document.addEventListener('DOMContentLoaded', function() {
-
-});
     })
 </script>
 <script>
@@ -369,11 +364,6 @@
 }
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    fetchAndDisplayPlaces();
-});
-
-
 document.getElementById('filter_submit').addEventListener('click', function() {
     const country = document.getElementById('filter_country').value;
     const weather = document.getElementById('filter_weather').value;
@@ -405,9 +395,7 @@ function updateCountrySelect() {
         })
         .catch(error => console.error('Error fetching weathers:', error));
 }
-document.addEventListener('DOMContentLoaded', function() {
-        updateCountrySelect();
-});
+
 
 function updateWeatherSelect() {
         fetch('/weather')
@@ -431,9 +419,7 @@ function updateWeatherSelect() {
             })
             .catch(error => console.error('Error fetching countries:', error));
     }
-document.addEventListener('DOMContentLoaded', function() {
-        updatePlaceSelect();
-});
+
 
 function updatePlaceSelect() {
     fetch('/places')
@@ -457,8 +443,14 @@ function updatePlaceSelect() {
         })
         .catch(error => console.error('Error fetching weathers:', error));
 }
+
 document.addEventListener('DOMContentLoaded', function() {
         updatePlaceSelect();
+        updateCountrySelect();
+        updateWeatherSelect();
+        fetchAndDisplayPlaces();
+
+
 });
 </script>
     </body>

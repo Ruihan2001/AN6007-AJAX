@@ -65,9 +65,8 @@ def view_places():
             filter_weather = None
 
         if filter_country is None and filter_weather is None:
-            print('00')
+
             filtered_places = place_list
-            # 问题在这 place_list都是空的，当然找不到
             print(place_list)
             print(filtered_places)
         else:
@@ -114,16 +113,17 @@ def vote():
         user_name = request.form.get('username3')
         voted_place = request.form.get('votedplace')
         feedback = request.form.get('feedback')
+        print(user_name,voted_place,feedback)
         vote_history_records = model.findUserVoteHistory(user_name,voted_place)
         # print(vote_history_records)
         if vote_history_records:
-            flash("You already voted", 'danger')
+            # flash("You already voted", 'danger')
             return jsonify(error='You already voted')
 
         else:
             model.createVote(user_name, voted_place, feedback)
             remark.append([user_name, voted_place, feedback])
-            flash("Feedback added successfully", 'success')
+            # flash("Feedback added successfully", 'success')
             return jsonify(success="Feedback added successfully")
 
 
