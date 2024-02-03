@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, request,jsonify,render_template,flash
+from flask import Flask, redirect, url_for, request, jsonify, render_template, flash, json
 import model
 app = Flask(__name__)
 app.secret_key = 'Grh@20010321'
@@ -67,8 +67,7 @@ def view_places():
         if filter_country is None and filter_weather is None:
 
             filtered_places = place_list
-            print(place_list)
-            print(filtered_places)
+
         else:
             filtered_places = []
             if filter_country and filter_weather:
@@ -84,7 +83,9 @@ def view_places():
                 filtered_places = model.binary_search_places(place_list, '', filter_weather, 0, len(place_list) - 1)
                 print(filtered_places)
 
-        places_info = [f"{place.name},{place.country},{place.weather},{place.description},{place.total_votes},{place.all_feedback}" for place in filtered_places]
+
+        places_info = [f"{place.name},{place.country},{place.weather},{place.description},{place.total_votes}," + ';'.join(place.all_feedback) for place in filtered_places]
+
         return jsonify(places_info)
     else:
         return jsonify([])
@@ -121,7 +122,7 @@ def vote():
             return jsonify(error='You already voted')
 
         else:
-            model.createVote(user_name, voted_place, feedback)
+            model.createVote(user_name, voted_place, feedback,place_list)
             remark.append([user_name, voted_place, feedback])
             # flash("Feedback added successfully", 'success')
             return jsonify(success="Feedback added successfully")

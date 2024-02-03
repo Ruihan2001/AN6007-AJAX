@@ -35,7 +35,7 @@
     </head>
     <body style="background: none">
 <!--  Navigation  -->
-    <div class="nav">
+    <div class="nav" id='nav'>
       <div class="container">
         <div class="menu fhNav">
             <ul class="inner-nav clear">
@@ -45,18 +45,16 @@
         </div>
       </div>
     </div>
-    <section class="w3l-inner-banner-main">
-        <div class="about-inner about editContent">
+    <header id="home">
+        <div class="overlay">
             <div class="container">
-            <div class="breadcrumbs-sub">
-                <ul class="breadcrumbs-custom-path">
-                    <li class="right-side propClone"><a href="{{ url_for('add_place') }}" class="editContent">Home <span class="fa fa-angle-right" aria-hidden="true"></span></a> <p></li>
-                    <li class="active editContent" style="color: #cecdcd">Add Places</li>
-                </ul>
+                <div style="margin-top: 20%">
+                    <h1><span>Amazing</span><br>Place Of Interests</h1>
+                    <p>An online systems to conduct surveys from worldwide on your interest in tourist attraction points worldwide!</p>
+                </div>
             </div>
-			</div>
-		</div>
-    </section>
+        </div>
+    </header>
 
 <!--Add Places-->
     <div class="contact" id="add_place_div">
@@ -73,6 +71,7 @@
             <div class="contact-form">
                 <form action="/add_place" method="post">
                     <section class="content bgcolor-8">
+                        <h3 class="header-name">Add Place</h3>
                         <span class="input input--isao">
                             <input class="input__field input__field--isao" type="text" id="username1" name="username1" required />
                             <label class="input__label input__label--isao" for="username1">
@@ -112,8 +111,9 @@
 <section class="w3l-covers-18 w3l-call-to-action_9">
         <div class="covers-main editContent">
             <div class="container">
+                <h3 class="header-name" style="margin-top: 50px;margin-bottom: 50px">Filter & View Place List</h3>
                 <form action="/view_places" method="post" class="booking-form" style="margin-bottom: 20px">
-                    <div class="row book-form">
+                    <div class="row book-form" style="margin-left: 10%;text-align: left">
                         <div class="form-input col-md-2" >
                                                 <label>Country</label>
                                                 <select name="filter_country" id="filter_country" class="selectpicker">
@@ -136,6 +136,7 @@
             </div>
         </form>
                 <div id='filtered-results' class="gallery-image row">
+
 <!--                    {% for place in filtered_places %}-->
 <!--                    <div class="img-box">-->
 <!--                        <div class="col-lg-4 col-md-6 top-top">-->
@@ -170,18 +171,19 @@
             <div class="contact-form">
                 <form action="/vote" method="post">
                     <section class="content">
-                        <span class="input input--isao">
+                        <h3 class="header-name" style="margin-top: 50px">Vote</h3>
+                        <span class="input input--isao" style="width: 50%">
                             <input class="input__field input__field--isao" type="text" id="username3" name="username3" required />
                             <label class="input__label input__label--isao" for="username3">
                                 <span class="input__label-content input__label-content--isao">User Name</span>
                             </label>
                         </span>
-                        <span class="input input--isao">
+                        <span class="input input--isao" style="width: 50%;text-align: left">
                             <label class="headline">Place</label>
                                 <select name="voted_place" id='voted_place' class="selectpicker">
                                 </select>
                         </span>
-                        <span class="input input--isao">
+                        <span class="input input--isao"style="width: 50%">
                             <p style="text-align: left;color: #8ca6bf;font-weight: bold;font-size: 70.25%;padding: 0">Feedback</p>
                             <textarea style="border: none; background-color: #EFEEEE;width: 100%;color: #6a7989"  name="feedback" id="feedback" required></textarea>
                         </span>
@@ -193,7 +195,7 @@
     </div>
 
 <!--View History-->
-    <section class="content view_history_div">
+    <section class="content view_history_div" style="background-color: #f9f9f9">
     <div class="container" style="margin-top: 30px;margin-bottom: 30px">
     {% for message in get_flashed_messages(with_categories=True) %}
             <div class="alert alert-{{ message[0] }}">
@@ -202,6 +204,7 @@
             </div>
     {%  endfor %}
         <form action="/history" method="post">
+            <h3 class="header-name" style="margin-top: 50px;margin-bottom: 30px">View History</h3>
                 <input type="text" placeholder="User Name" name="username2" id="username2" required>
                 <input class="btn btn-style btn-primary btn-style" id='history' type="submit" style="margin-left: 20px;width: 100px" value="Search">
         </form>
@@ -212,46 +215,46 @@
 </div>
     </section>
 
-<script src="../static/js/jquery-3.3.1.min.js"></script>
-<script src="../static/js/bootstrap.min.js"></script>
-<script>
-    document.getElementById('add_place').addEventListener('click', function(event) {
-        event.preventDefault(); // 阻止表单默认提交行为
-        const formDataString = `username1=${encodeURIComponent(document.getElementById('username1').value)}&` +
-            `place=${encodeURIComponent(document.getElementById('placename').value)}&` +
-            `country=${encodeURIComponent(document.getElementById('country').value)}&` +
-            `weather=${encodeURIComponent(document.getElementById('weather').value)}&` +
-            `description=${encodeURIComponent(document.getElementById('description').value)}`;
+    <script src="../static/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById('add_place').addEventListener('click', function(event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+            const formDataString = `username1=${encodeURIComponent(document.getElementById('username1').value)}&` +
+                `place=${encodeURIComponent(document.getElementById('placename').value)}&` +
+                `country=${encodeURIComponent(document.getElementById('country').value)}&` +
+                `weather=${encodeURIComponent(document.getElementById('weather').value)}&` +
+                `description=${encodeURIComponent(document.getElementById('description').value)}`;
 
-        fetch('/add_place', {
-            method: 'POST',
-            body: formDataString,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.success) {
-                    document.getElementById('message').textContent = "Place added successfully";
-                    updateCountrySelect();
-                    updateWeatherSelect();
-                    updatePlaceSelect();
-                    fetchAndDisplayPlaces();
-                }
-                if (data.error) {
-                    document.getElementById('message').textContent = "Error: ";
+            fetch('/add_place', {
+                method: 'POST',
+                body: formDataString,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
-            .catch(error => console.error('Error:', error));
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        document.getElementById('message').textContent = "Place added successfully";
+                        updateCountrySelect();
+                        updateWeatherSelect();
+                        updatePlaceSelect();
+                        fetchAndDisplayPlaces();
+                    }
+                    if (data.error) {
+                        document.getElementById('message').textContent = "Error: ";
+                    }
+                })
+                .catch(error => console.error('Error:', error));
 
-         document.addEventListener('DOMContentLoaded', function() {
+             document.addEventListener('DOMContentLoaded', function() {
 
-});
-    })
-</script>
-<script>
+    });
+        })
+    </script>
+    <script>
 
     document.getElementById('vote').addEventListener('click', function(event) {
         event.preventDefault(); // 阻止表单默认提交行为
@@ -287,7 +290,7 @@
 
     })
 </script>
-<script>
+    <script>
     $("#history").click(function(event){
         event.preventDefault();
         var username = $("#username2").val();
@@ -326,132 +329,148 @@
         });
 })
 </script>
-<script>
-   function fetchAndDisplayPlaces(country = 'Any', weather = 'Any') {
-       event.preventDefault();
+    <script>
+       function fetchAndDisplayPlaces(country = 'Any', weather = 'Any') {
+           event.preventDefault();
 
-    fetch('/view_places', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `filter_country=${country}&filter_weather=${weather}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        const $container = $('#filtered-results');
-        $container.empty(); // 清空现有内容
+        fetch('/view_places', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `filter_country=${country}&filter_weather=${weather}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            const $container = $('#filtered-results');
+            $container.empty(); // 清空现有内容
 
-        data.forEach(function (placeStr) {
-            const placeDetails = placeStr.split(',');
-            const $placeElement = $(`<div class="img-box">
-                <div class="col-lg-4 col-md-6 top-top">
-                <h5 class="my-2"><a href="#">${placeDetails[0]}</a></h5>
+            data.forEach(function (placeStr) {
+                const placeDetails = placeStr.split(',');
+                const feedbacks = placeDetails[5].split(';'); // 使用`;`分割反馈列表
+        let feedbackHtml = feedbacks.map(feedback => `<p>${feedback}</p>`).join(''); // 为每条反馈创建段落
+
+        const $placeElement = $(`<div class="col-lg-4 col-md-6">
+            <div class="img-box">
+                <h5 class="my-2"><p>${placeDetails[0]}</p></h5>
                 <div class="blog-date">
                     <p class="pos-date text-right"><span class="fa fa-users mr-1"></span>Voted People ${placeDetails[4]}</p>
                 </div>
-                <p class="para">${placeDetails[3]}</p>
-                <div class="top-gap">
-                    <h5>More</h5>
-                    <a href="#url" class="icon text-center"><span class="fa fa-chevron-right"></span></a>
+                <p class="para">Country: ${placeDetails[1]}</p>
+                <p class="para">Weather: ${placeDetails[2]}</p>
+                <p class="para">Description: ${placeDetails[3]}</p>
+                <div class="top-gap" style="display:block">
+                    <h5>All Feedback</h5>
+                    ${feedbackHtml}
                 </div>
-                </div>
-                </div>`);
-            $container.append($placeElement);
-        });
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-
-document.getElementById('filter_submit').addEventListener('click', function() {
-    const country = document.getElementById('filter_country').value;
-    const weather = document.getElementById('filter_weather').value;
-    fetchAndDisplayPlaces(country, weather); // 根据筛选条件获取并展示地点
-});
-
-
-</script>
-<script>
-function updateCountrySelect() {
-    fetch('/country')
-        .then(response => response.json())
-        .then(data => {
-            const select = document.getElementById('filter_country');
-            let first = true;
-            while (select.children.length > 1) {
-                if (!first) {
-                    select.removeChild(select.lastChild);
-                } else {
-                    first = false;
-                }
-            }
-            data.forEach(country => {
-                const option = document.createElement('option');
-                option.value = country;
-                option.textContent = country;
-                select.appendChild(option);
+            </div>
+        </div>`);
+                $container.append($placeElement);
             });
         })
-        .catch(error => console.error('Error fetching weathers:', error));
-}
-
-
-function updateWeatherSelect() {
-        fetch('/weather')
-            .then(response => response.json())
-            .then(data => {
-                const select = document.getElementById('filter_weather');
-                let first = true;
-            while (select.children.length > 1) {
-                if (!first) {
-                    select.removeChild(select.lastChild);
-                } else {
-                    first = false;
-                }
-            }
-                data.forEach(weather => {
-                    const option = document.createElement('option');
-                    option.value = weather;
-                    option.textContent = weather;
-                    select.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error fetching countries:', error));
+        .catch(error => console.error('Error:', error));
     }
 
 
-function updatePlaceSelect() {
-    fetch('/places')
-        .then(response => response.json())
-        .then(data => {
-            const select = document.getElementById('voted_place');
-            let first = true;
-            while (select.children.length > 1) {
-                if (!first) {
-                    select.removeChild(select.lastChild);
-                } else {
-                    first = false;
+    document.getElementById('filter_submit').addEventListener('click', function() {
+        const country = document.getElementById('filter_country').value;
+        const weather = document.getElementById('filter_weather').value;
+        fetchAndDisplayPlaces(country, weather); // 根据筛选条件获取并展示地点
+    });
+
+
+    </script>
+    <script>
+    function updateCountrySelect() {
+        fetch('/country')
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('filter_country');
+                let first = true;
+                while (select.children.length > 1) {
+                    if (!first) {
+                        select.removeChild(select.lastChild);
+                    } else {
+                        first = false;
+                    }
                 }
-            }
-            data.forEach(place => {
-                const option = document.createElement('option');
-                option.value = place;
-                option.textContent = place;
-                select.appendChild(option);
-            });
-        })
-        .catch(error => console.error('Error fetching weathers:', error));
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-        updatePlaceSelect();
-        updateCountrySelect();
-        updateWeatherSelect();
-        fetchAndDisplayPlaces();
+                data.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country;
+                    option.textContent = country;
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching weathers:', error));
+    }
 
 
-});
-</script>
-    </body>
+    function updateWeatherSelect() {
+            fetch('/weather')
+                .then(response => response.json())
+                .then(data => {
+                    const select = document.getElementById('filter_weather');
+                    let first = true;
+                while (select.children.length > 1) {
+                    if (!first) {
+                        select.removeChild(select.lastChild);
+                    } else {
+                        first = false;
+                    }
+                }
+                    data.forEach(weather => {
+                        const option = document.createElement('option');
+                        option.value = weather;
+                        option.textContent = weather;
+                        select.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching countries:', error));
+        }
+
+
+    function updatePlaceSelect() {
+        fetch('/places')
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('voted_place');
+                let first = true;
+                while (select.children.length > 1) {
+                    if (!first) {
+                        select.removeChild(select.lastChild);
+                    } else {
+                        first = false;
+                    }
+                }
+                data.forEach(place => {
+                    const option = document.createElement('option');
+                    option.value = place;
+                    option.textContent = place;
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error fetching weathers:', error));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+            updatePlaceSelect();
+            updateCountrySelect();
+            updateWeatherSelect();
+            fetchAndDisplayPlaces();
+
+
+    });
+    </script>
+    <script>
+        	$(window).on("scroll", function () {
+	  var scroll = $(window).scrollTop();
+
+	  if (scroll >= 700) {
+		$("#nav").addClass("nav-fixed");
+	  } else {
+		$("#nav").removeClass("nav-fixed");
+	  }
+	});
+    </script>
+</body>
 </html>

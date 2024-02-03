@@ -143,16 +143,26 @@ def filterPlaces():
     result_weather = binary_search(weather_index, target_weather)
 
 # Vote
-def createVote(user_name,voted_place,feedback):
+def createVote(user_name,voted_place,feedback,place_list):
     existing_user = next((user for user in userdata if user.username == user_name), None)
 
     if existing_user:
         existing_user.linked_places.append(UserLinkedPlace(voted_place, feedback))
+
     else:
 
         new_user = User(user_name)
         new_user.linked_places.append(UserLinkedPlace(voted_place, feedback))
         userdata.append(new_user)
+
+    voted_place = next((place for place in place_list if place.name == voted_place), None)
+    if voted_place:
+        voted_place.total_votes += 1
+        voted_place.all_feedback.append(feedback)
+        print(voted_place.all_feedback)
+    else:
+        # 如果没有找到地点，可能需要处理错误或添加新地点
+        print("Error: Place not found.")
 
     return 'ok'
 
