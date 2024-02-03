@@ -59,12 +59,6 @@
 <!--Add Places-->
     <div class="contact" id="add_place_div">
         <div class="container">
-<!--            {% for message in get_flashed_messages(with_categories=True) %}-->
-<!--            <div class="alert alert-{{ message[0] }}">-->
-<!--                <button type="button" class="close" data-dismiss="alert">&times;</button>-->
-<!--                {{ message[1] }}-->
-<!--            </div>-->
-<!--            {%  endfor %}-->
 
             <div class="alert" id="message">
             </div>
@@ -161,13 +155,6 @@
     <div class="contact" id="contact">
         <div class="container">
             <div id = message2></div>
-<!--             {% for message in get_flashed_messages(with_categories=True) %}-->
-<!--            <div class="alert alert-{{ message[0] }}">-->
-<!--                <button type="button" class="close" data-dismiss="alert">&times;</button>-->
-<!--                {{ message[1] }}-->
-<!--            </div>-->
-<!--            {% endfor %}-->
-
             <div class="contact-form">
                 <form action="/vote" method="post">
                     <section class="content">
@@ -219,7 +206,7 @@
     <script src="../static/js/bootstrap.min.js"></script>
     <script>
         document.getElementById('add_place').addEventListener('click', function(event) {
-            event.preventDefault(); // 阻止表单默认提交行为
+            event.preventDefault();
             const formDataString = `username1=${encodeURIComponent(document.getElementById('username1').value)}&` +
                 `place=${encodeURIComponent(document.getElementById('placename').value)}&` +
                 `country=${encodeURIComponent(document.getElementById('country').value)}&` +
@@ -237,14 +224,49 @@
                 .then(data => {
                     console.log(data);
                     if (data.success) {
-                        document.getElementById('message').textContent = "Place added successfully";
+
+
+
+                        messageElement = document.getElementById('message')
+
+                        const closeButton = document.createElement('button');
+                        closeButton.type = 'button';
+                        closeButton.className = 'close';
+                        closeButton.setAttribute('data-dismiss', 'alert');
+                        closeButton.innerHTML = '&times;';
+
+
+                        messageElement.textContent = '';
+                        messageElement.appendChild(closeButton);
+                        messageElement.appendChild(document.createTextNode("Place added successfully"));
+
+
+                        messageElement.classList.add('alert', 'alert-success');
+
                         updateCountrySelect();
                         updateWeatherSelect();
                         updatePlaceSelect();
                         fetchAndDisplayPlaces();
+
+
                     }
                     if (data.error) {
-                        document.getElementById('message').textContent = "Error: ";
+                        messageElement = document.getElementById('message')
+
+                        const closeButton = document.createElement('button');
+                        closeButton.type = 'button';
+                        closeButton.className = 'close';
+                        closeButton.setAttribute('data-dismiss', 'alert');
+                        closeButton.innerHTML = '&times;';
+
+
+                        messageElement.textContent = '';
+                        messageElement.appendChild(closeButton);
+                        messageElement.appendChild(document.createTextNode("Error: You have added this place before"));
+
+
+                        messageElement.classList.add('alert', 'alert-danger');
+
                     }
                 })
                 .catch(error => console.error('Error:', error));
@@ -257,7 +279,7 @@
     <script>
 
     document.getElementById('vote').addEventListener('click', function(event) {
-        event.preventDefault(); // 阻止表单默认提交行为
+        event.preventDefault();
 
         const voteButton = document.getElementById('vote');
         voteButton.disabled = true;
@@ -277,10 +299,45 @@
             .then(data => {
                 console.log(data);
                 if (data.success) {
-                    document.getElementById('message2').textContent = "Vote successfully";
+
+
+                    messageElement = document.getElementById('message2')
+
+                    const closeButton = document.createElement('button');
+                    closeButton.type = 'button';
+                    closeButton.className = 'close';
+                    closeButton.setAttribute('data-dismiss', 'alert');
+                    closeButton.innerHTML = '&times;';
+
+
+                    messageElement.textContent = '';
+                    messageElement.appendChild(closeButton);
+                    messageElement.appendChild(document.createTextNode("Vote successfully"));
+
+
+                    messageElement.classList.add('alert', 'alert-success');
+
+                    updateCountrySelect();
+                    updateWeatherSelect();
+                    updatePlaceSelect();
+                    fetchAndDisplayPlaces();
+
+
                 }
                 if (data.error) {
-                    document.getElementById('message2').textContent = "Error: ";
+                    const closeButton = document.createElement('button');
+                    closeButton.type = 'button';
+                    closeButton.className = 'close';
+                    closeButton.setAttribute('data-dismiss', 'alert');
+                    closeButton.innerHTML = '&times;';
+
+
+                    messageElement.textContent = '';
+                    messageElement.appendChild(closeButton);
+                    messageElement.appendChild(document.createTextNode("Error: You have added this place before"));
+
+
+                    messageElement.classList.add('alert', 'alert-danger');
                 }
             })
             .catch(error => console.error('Error:', error))
@@ -375,7 +432,7 @@
     document.getElementById('filter_submit').addEventListener('click', function() {
         const country = document.getElementById('filter_country').value;
         const weather = document.getElementById('filter_weather').value;
-        fetchAndDisplayPlaces(country, weather); // 根据筛选条件获取并展示地点
+        fetchAndDisplayPlaces(country, weather);
     });
 
 
