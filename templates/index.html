@@ -159,18 +159,19 @@
 <!--Vote -->
     <div class="contact" id="contact">
         <div class="container">
-             {% for message in get_flashed_messages(with_categories=True) %}
-            <div class="alert alert-{{ message[0] }}">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                {{ message[1] }}
-            </div>
-            {% endfor %}
+            <div id = message2></div>
+<!--             {% for message in get_flashed_messages(with_categories=True) %}-->
+<!--            <div class="alert alert-{{ message[0] }}">-->
+<!--                <button type="button" class="close" data-dismiss="alert">&times;</button>-->
+<!--                {{ message[1] }}-->
+<!--            </div>-->
+<!--            {% endfor %}-->
 
             <div class="contact-form">
                 <form action="/vote" method="post">
                     <section class="content">
                         <span class="input input--isao">
-                            <input class="input__field input__field--isao" type="text" id="username3" name="user_name" required />
+                            <input class="input__field input__field--isao" type="text" id="username3" name="username3" required />
                             <label class="input__label input__label--isao" for="username3">
                                 <span class="input__label-content input__label-content--isao">User Name</span>
                             </label>
@@ -183,9 +184,9 @@
                         </span>
                         <span class="input input--isao">
                             <p style="text-align: left;color: #8ca6bf;font-weight: bold;font-size: 70.25%;padding: 0">Feedback</p>
-                            <textarea style="border: none; background-color: #EFEEEE;width: 100%;color: #6a7989"  name="feedback" required></textarea>
+                            <textarea style="border: none; background-color: #EFEEEE;width: 100%;color: #6a7989"  name="feedback" id="feedback" required></textarea>
                         </span>
-                        <input type="submit" value="VOTE">
+                        <input type="submit" value="VOTE" id="vote" name="vote">
                     </section>
                 </form>
             </div>
@@ -212,85 +213,119 @@
 </div>
     </section>
 
-    <script src="../static/js/jquery-3.3.1.min.js"></script>
-    <script src="../static/js/bootstrap.min.js"></script>
-    <script>
-        document.getElementById('add_place').addEventListener('click', function(event) {
-            event.preventDefault(); // 阻止表单默认提交行为
-            const formDataString = `username1=${encodeURIComponent(document.getElementById('username1').value)}&` +
-                `place=${encodeURIComponent(document.getElementById('placename').value)}&` +
-                `country=${encodeURIComponent(document.getElementById('country').value)}&` +
-                `weather=${encodeURIComponent(document.getElementById('weather').value)}&` +
-                `description=${encodeURIComponent(document.getElementById('description').value)}`;
+<script src="../static/js/jquery-3.3.1.min.js"></script>
+<script src="../static/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById('add_place').addEventListener('click', function(event) {
+        event.preventDefault(); // 阻止表单默认提交行为
+        const formDataString = `username1=${encodeURIComponent(document.getElementById('username1').value)}&` +
+            `place=${encodeURIComponent(document.getElementById('placename').value)}&` +
+            `country=${encodeURIComponent(document.getElementById('country').value)}&` +
+            `weather=${encodeURIComponent(document.getElementById('weather').value)}&` +
+            `description=${encodeURIComponent(document.getElementById('description').value)}`;
 
-            fetch('/add_place', {
-                method: 'POST',
-                body: formDataString,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+        fetch('/add_place', {
+            method: 'POST',
+            body: formDataString,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    document.getElementById('message').textContent = "Place added successfully";
+                    updateCountrySelect();
+                    updateWeatherSelect();
+                    updatePlaceSelect();
+                    fetchAndDisplayPlaces();
+                }
+                if (data.error) {
+                    document.getElementById('message').textContent = "Error: ";
                 }
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    if (data.success) {
-                        document.getElementById('message').textContent = "Place added successfully";
-                        updateCountrySelect();
-                        updateWeatherSelect();
-                        updatePlaceSelect();
-                        fetchAndDisplayPlaces();
-                    }
-                    if (data.error) {
-                        document.getElementById('message').textContent = "Error: ";
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error:', error));
 
-             document.addEventListener('DOMContentLoaded', function() {
+         document.addEventListener('DOMContentLoaded', function() {
 
-    });
-        })
-    </script>
+});
+    })
+</script>
 <script>
+    document.getElementById('vote').addEventListener('click', function(event) {
+        event.preventDefault(); // 阻止表单默认提交行为
+        const formDataString = `username3=${encodeURIComponent(document.getElementById('username3').value)}&` +
+            `votedplace=${encodeURIComponent(document.getElementById('voted_place').value)}&` +
+            `feedback=${encodeURIComponent(document.getElementById('feedback').value)}&`;
 
-            $("#history").click(function(event){
-                event.preventDefault();
-                var username = $("#username2").val();
-                console.log(username)
-                $.ajax({
-                    type:'POST',
-                    url: "/history",
-                    data: {username2: username},
-                    success: function(response) {
-                        var tableHTML = '<table class="table" style="background: #ededed">' +
-                                        '<thead>' +
-                                        '<tr>' +
-                                        '<th>Place</th>' +
-                                        '<th>Feedback</th>' +
-                                        '</tr>' +
-                                        '</thead>' +
-                                        '<tbody>';
+        fetch('/vote', {
+            method: 'POST',
+            body: formDataString,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    document.getElementById('message2').textContent = "Place added successfully";
+                    updateCountrySelect();
+                    updateWeatherSelect();
+                    updatePlaceSelect();
+                    fetchAndDisplayPlaces();
+                }
+                if (data.error) {
+                    document.getElementById('message2').textContent = "Error: ";
+                }
+            })
+            .catch(error => console.error('Error:', error));
 
-                        if(response.history_records && response.history_records.length > 0) {
-                            response.history_records.forEach(function(record) {
-                                tableHTML += '<tr>' +
-                                             '<td>' + record[0] + '</td>' +
-                                             '<td>' + record[1] + '</td>' +
-                                             '</tr>';
-                            });
-                        } else {
-                            tableHTML += '<tr>' +
-                                         '<td colspan="2">No history records found.</td>' +
-                                         '</tr>';
-                        }
+         document.addEventListener('DOMContentLoaded', function() {
 
-                        tableHTML += '</tbody></table>';
+});
+    })
+</script>
+<script>
+    $("#history").click(function(event){
+        event.preventDefault();
+        var username = $("#username2").val();
+        console.log(username)
+        $.ajax({
+            type:'POST',
+            url: "/history",
+            data: {username2: username},
+            success: function(response) {
+                var tableHTML = '<table class="table" style="background: #ededed">' +
+                                '<thead>' +
+                                '<tr>' +
+                                '<th>Place</th>' +
+                                '<th>Feedback</th>' +
+                                '</tr>' +
+                                '</thead>' +
+                                '<tbody>';
 
-                        $("#history_table").html(tableHTML);
-                    }
-                });
+                if(response.history_records && response.history_records.length > 0) {
+                    response.history_records.forEach(function(record) {
+                        tableHTML += '<tr>' +
+                                     '<td>' + record[0] + '</td>' +
+                                     '<td>' + record[1] + '</td>' +
+                                     '</tr>';
+                    });
+                } else {
+                    tableHTML += '<tr>' +
+                                 '<td colspan="2">No history records found.</td>' +
+                                 '</tr>';
+                }
+
+                tableHTML += '</tbody></table>';
+
+                $("#history_table").html(tableHTML);
+            }
+        });
 })
-    </script>
+</script>
 <script>
    function fetchAndDisplayPlaces(country = 'Any', weather = 'Any') {
        event.preventDefault();

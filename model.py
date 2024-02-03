@@ -18,7 +18,7 @@ class Place:
         self.all_feedback = []
 
 
-# userdata = []
+
 # ruihan = User('ruihan')
 # ruihan.linked_places.append(UserLinkedPlace('Chengdu', 'delicious'))
 # ruiyang = User('ruiyang')
@@ -26,7 +26,7 @@ class Place:
 # userdata.append(ruihan)
 # userdata.append(ruiyang)
 
-
+userdata = []
 class Place:
     def __init__(self, name, country, weather, description):
         self.name = name
@@ -38,8 +38,10 @@ class Place:
 
 
 def findUserHistory(username):
-    quickSort(userdata,0,1,lambda x:x.username)
-    target_index = binary_search(userdata,0,len(userdata),username,key=lambda x:x.username if not isinstance(x, str) else x)
+    if userdata and len(userdata) > 1:
+        quickSort(userdata,0,len(userdata) - 1,lambda x:x.username)
+
+    target_index = binary_search(userdata,0,len(userdata)-1,username,key=lambda x:x.username if not isinstance(x, str) else x)
 
 
     history_records = []
@@ -140,10 +142,68 @@ def filterPlaces():
     result_country = binary_search(country_index, target_country)
     result_weather = binary_search(weather_index, target_weather)
 
-def findUser():
-    pass
+# Vote
+def createVote(user_name,voted_place,feedback):
+    User_name = User(user_name)
+    # print(User_name.username)
+    User_name.linked_places.append(UserLinkedPlace(voted_place, feedback))
+    userdata.append(User_name)
+    # print(user_name,voted_place,feedback)
+    return 'ok'
+
+def findUserVoteHistory(username, voted_place_name):
+    # 使用二分查找法找到用户
+    for user in userdata:
+        print(user.username)
+        if username == user.username:
+            print('存在用户')
+            quicksort(user.linked_places, 0, len(user.linked_places) - 1, key=lambda x: x.place_name)
+            # 为了使用二分查找，确保linked_places已经根据place_name排序
+            linked_places_sorted = sorted(user.linked_places, key=lambda x: x.place_name)
+            place_index = binary_search_new(linked_places_sorted, 0, len(linked_places_sorted) - 1, voted_place_name,
+                                            key=lambda x: x.place_name)
+
+            return place_index != -1  # 如果找到了voted_place，返回True，否则返回False
+        else:
+            continue
+    return False
+
+def binary_search_new(arr, low, high, x, key=lambda x: x):
+    if high >= low:
+        mid = (high + low) // 2
+        # 直接比较目标x与通过key函数获取的中间元素的值
+        print(key(arr[mid]))
+        if key(arr[mid]) == x:
+            return mid
+        elif key(arr[mid]) > x:
+            print(key(arr[mid]))
+            return binary_search_new(arr, low, mid - 1, x, key)
+        else:
+            print(key(arr[mid]))
+            return binary_search_new(arr, mid + 1, high, x, key)
+    else:
+        return -1
+
+def quicksort(arr, low, high, key=lambda x: x):
+    if low < high:
+        pi = partition(arr, low, high, key)
+        quicksort(arr, low, pi-1, key)
+        quicksort(arr, pi+1, high, key)
 
 
+def partition(array, low, high,key = lambda x:x):
+  pivot = key(array[high]).lower()
+  i = low - 1
+  for j in range(low, high):
+    if key(array[j]).lower() <= pivot:
+      i = i + 1
+      (array[i], array[j]) = (array[j], array[i])
+  (array[i + 1], array[high]) = (array[high], array[i + 1])
+  return i + 1
+
+
+
+#
 def partition(array, low, high,key = lambda x:x):
   pivot = key(array[high]).lower()
   i = low - 1
@@ -235,25 +295,25 @@ def update_vote_history_file(remark):
 
 
 
-if __name__ == '__main__':
-    userdata,places=load_data_from_files(user_file='users.txt', places_file='places.txt',
-                         user_linked_places_file='user_linked_places.txt')
-    userdata = []
-    ruihan = User('ruihan')
-    ruihan.linked_places.append(UserLinkedPlace('Chengdu','delicious'))
-    ruiyang = User('ruiyang')
-    ruihan.linked_places.append(UserLinkedPlace('Hongkong','Expensive'))
-    userdata.append(ruihan)
-    userdata.append(ruiyang)
-    place1 = Place('1','2','3','4')
-    place2 = Place('5', '6', '7', '8')
-    places=[]
-    places.append(place1)
-    places.append(place2)
-    print(places)
-    print(binary_search_places(places, target_country='2', target_weather='Any',low = 0,high=len(places)-1))
-
-    print(findUserHistory('ruihan'))
-    print(findUserHistory('yubin'))
+# if __name__ == '__main__':
+#     userdata,places=load_data_from_files(user_file='users.txt', places_file='places.txt',
+#                          user_linked_places_file='user_linked_places.txt')
+#     userdata = []
+#     ruihan = User('ruihan')
+#     ruihan.linked_places.append(UserLinkedPlace('Chengdu','delicious'))
+#     ruiyang = User('ruiyang')
+#     ruihan.linked_places.append(UserLinkedPlace('Hongkong','Expensive'))
+#     userdata.append(ruihan)
+#     userdata.append(ruiyang)
+#     place1 = Place('1','2','3','4')
+#     place2 = Place('5', '6', '7', '8')
+#     places=[]
+#     places.append(place1)
+#     places.append(place2)
+#     print(places)
+#     print(binary_search_places(places, target_country='2', target_weather='Any',low = 0,high=len(places)-1))
+#
+#     print(findUserHistory('ruihan'))
+#     print(findUserHistory('yubin'))
 
     

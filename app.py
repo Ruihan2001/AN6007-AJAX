@@ -7,11 +7,13 @@ app.secret_key = 'Grh@20010321'
 def index():
     return render_template("index.html")
 
-def read_list():
+# def read_list():
 
 
 
 place_list = []
+remark=[]
+
 @app.route('/add_place', methods=['GET','POST'])
 def add_place():
     if request.method == 'POST':
@@ -105,8 +107,30 @@ def history():
         return render_template("index.html")
 
 
+@app.route('/vote',methods=['GET','POST'])
+def vote():
+    if request.method == 'POST':
+        user_name = request.form.get('username3')
+        voted_place = request.form.get('voted_place')
+        feedback = request.form.get('feedback')
+        vote_history_records = model.findUserVoteHistory(user_name,voted_place)
+        # print(vote_history_records)
+        if vote_history_records:
+            flash("You already voted", 'danger')
+            return jsonify(error='You already voted')
+
+        else:
+            model.createVote(user_name, voted_place, feedback)
+            remark.append([user_name, voted_place, feedback])
+            flash("Feedback added successfully", 'success')
+            return jsonify(success="Feedback added successfully")
+
+
+    return render_template("vote.html")
 @app.route('/analysis',methods=['GET','POST'])
 def analysis():
     return render_template("analysis.html")
+
+
 if __name__ == '__main__':
     app.run(port=4060)
