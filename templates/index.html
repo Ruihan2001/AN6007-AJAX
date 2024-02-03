@@ -179,7 +179,6 @@
                         <span class="input input--isao">
                             <label class="headline">Place</label>
                                 <select name="voted_place" id='voted_place' class="selectpicker">
-                                    <option value="">Any</option>
                                 </select>
                         </span>
                         <span class="input input--isao">
@@ -255,6 +254,12 @@
 <script>
     document.getElementById('vote').addEventListener('click', function(event) {
         event.preventDefault(); // 阻止表单默认提交行为
+        const selectedOption = document.getElementById('voted_place').options[document.getElementById('voted_place').selectedIndex];
+
+
+        const selectedValue = selectedOption.value;
+        const selectedText = selectedOption.text;
+
         const formDataString = `username3=${encodeURIComponent(document.getElementById('username3').value)}&` +
             `votedplace=${encodeURIComponent(document.getElementById('voted_place').value)}&` +
             `feedback=${encodeURIComponent(document.getElementById('feedback').value)}&`;

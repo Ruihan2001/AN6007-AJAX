@@ -99,6 +99,7 @@ def history():
         user_name = request.form.get('username2')
         history_records = model.findUserHistory(str(user_name))
         if history_records:
+            print(history_records)
             return jsonify(history_records=history_records)
         else:
             flash('No related results! Please enter the correct username or re-vote!', 'danger')
@@ -111,7 +112,7 @@ def history():
 def vote():
     if request.method == 'POST':
         user_name = request.form.get('username3')
-        voted_place = request.form.get('voted_place')
+        voted_place = request.form.get('votedplace')
         feedback = request.form.get('feedback')
         vote_history_records = model.findUserVoteHistory(user_name,voted_place)
         # print(vote_history_records)
