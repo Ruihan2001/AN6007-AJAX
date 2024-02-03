@@ -1,0 +1,2 @@
+ruihan,Chengdu,delicious
+ruiyang,Hongkong,expensive

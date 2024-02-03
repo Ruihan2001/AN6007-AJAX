@@ -124,6 +124,7 @@ def vote():
         else:
             model.createVote(user_name, voted_place, feedback,place_list)
             remark.append([user_name, voted_place, feedback])
+            model.update_vote_history_file(remark)
             # flash("Feedback added successfully", 'success')
             return jsonify(success="Feedback added successfully")
 
