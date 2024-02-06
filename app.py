@@ -3,19 +3,11 @@ import model
 app = Flask(__name__)
 app.secret_key = 'Grh@20010321'
 
-
-
 @app.route('/')
 def index():
     return render_template("index.html")
 
-# def read_list():
-
-
-
-# place_list = model.load_data_from_files()
 remark=[]
-
 @app.route('/add_place', methods=['GET','POST'])
 def add_place():
     if request.method == 'POST':
@@ -74,16 +66,12 @@ def view_places():
         else:
             filtered_places = []
             if filter_country and filter_weather:
-                print('1')
-                print(filtered_places,filter_country)
                 filtered_places = model.binary_search_places(place_list, filter_country, filter_weather, 0,
                                                              len(place_list) - 1)
             elif filter_country:
-                print('2')
                 filtered_places = model.binary_search_places(place_list, filter_country, None, 0, len(place_list) - 1)
 
             elif filter_weather:
-                print('3')
                 filtered_places = model.binary_search_places(place_list, None, filter_weather, 0, len(place_list) - 1)
                 print(filtered_places)
 
@@ -93,8 +81,6 @@ def view_places():
         return jsonify(places_info)
     else:
         return jsonify([])
-
-# update_vote_history_file(remark)
 
 
 @app.route('/history',methods=['GET','POST'])
