@@ -275,15 +275,21 @@ def load_data_from_files(user_file='users.txt', places_file='places.txt', user_l
     # 读取地点数据
     with open(places_file, 'r', encoding='utf-8') as file:
         for line in file:
-            name, country, weather, description = line.strip().split(',')
-            places.append(Place(name, country, weather, description))
+            name, country, weather, description, total_votes, feedback_str = line.strip().split(',')
+            feedback_list = feedback_str.split(';') if feedback_str else []
+            place = Place(name, country, weather, description)
+            place.total_votes = int(total_votes)
+            place.all_feedback = feedback_list
+            places.append(place)
 
     # 读取用户关联地点数据
     with open(user_linked_places_file, 'r', encoding='utf-8') as file:
         for line in file:
             username, place_name, feedback = line.strip().split(',')
-            if username in userdata:
-                username.linked_places.append(UserLinkedPlace(place_name, feedback))
+            user = next((user for user in userdata if user.username == username), None)
+            if user:
+                user.linked_places.append(UserLinkedPlace(place_name, feedback))
+
 
     return userdata,places
 
@@ -292,14 +298,16 @@ def load_data_from_files(user_file='users.txt', places_file='places.txt', user_l
 def update_places_file(place_list):
     with open('places.txt', 'w', encoding='utf-8') as file:
         for place in place_list:
-            file.write(f"{place.name},{place.country},{place.weather},{place.description}\n")
-
+            feedback_str = ";".join(place.all_feedback)  # Join all feedback with ';'
+            file.write(
+                f"{place.name},{place.country},{place.weather},{place.description},{place.total_votes},{feedback_str}\n")
 
 def update_vote_history_file(remark):
     with open('vote_history.txt', 'w', encoding='utf-8') as file:
         for entry in remark:
             user_name, voted_place, feedback = entry
             file.write(f"{user_name},{voted_place},{feedback}\n")
+
 
 
 

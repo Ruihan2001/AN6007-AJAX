@@ -3,6 +3,8 @@ import model
 app = Flask(__name__)
 app.secret_key = 'Grh@20010321'
 
+
+
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -11,7 +13,7 @@ def index():
 
 
 
-place_list = []
+# place_list = model.load_data_from_files()
 remark=[]
 
 @app.route('/add_place', methods=['GET','POST'])
@@ -23,6 +25,7 @@ def add_place():
         weather = request.form.get('weather')
         description = request.form.get('description')
         # print(user_name,place,country,weather,description)
+
         existing_place = next((p for p in place_list if p.name == place and p.country == country), None)
         if existing_place:
             flash("Error: A place with the same name and country already exists.",'danger')
@@ -49,6 +52,7 @@ def get_weathers():
 
 @app.route('/places')
 def get_places():
+    # print(type(place_list))
     all_places = list(set(place.name for place in place_list))
     all_places.sort()
     return jsonify(all_places)
@@ -65,7 +69,6 @@ def view_places():
             filter_weather = None
 
         if filter_country is None and filter_weather is None:
-
             filtered_places = place_list
 
         else:
@@ -121,11 +124,18 @@ def vote():
             # flash("You already voted", 'danger')
             return jsonify(error='You already voted')
 
-        else:
-            model.createVote(user_name, voted_place, feedback,place_list)
+
+        # flash("Feedback added successfully", 'success')
+        place = next((p for p in place_list if p.name == voted_place), None)
+        if place:
+            model.createVote(user_name, voted_place, feedback, place_list)
             remark.append([user_name, voted_place, feedback])
             model.update_vote_history_file(remark)
-            # flash("Feedback added successfully", 'success')
+            place.total_votes += 1
+            place.all_feedback.append(feedback)
+            # Update places.txt with the new state of all places
+            model.update_places_file(place_list)
+
             return jsonify(success="Feedback added successfully")
 
 
@@ -136,4 +146,5 @@ def analysis():
 
 
 if __name__ == '__main__':
+    userdata, place_list = model.load_data_from_files()
     app.run(port=4060)

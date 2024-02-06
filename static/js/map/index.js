@@ -23,13 +23,13 @@
       {
         type: "category",
         data: [
-          "旅游行业",
-          "教育培训",
-          "游戏行业",
-          "医疗行业",
-          "电商行业",
-          "社交行业",
-          "金融行业"
+          "FR",
+          "DE",
+          "IT",
+          "JP",
+          "US",
+          "UK",
+          "CA"
         ],
         axisTick: {
           alignWithLabel: true
@@ -70,7 +70,7 @@
     ],
     series: [
       {
-        name: "直接访问",
+        name: "Number of votes",
         type: "bar",
         barWidth: "35%",
         data: [200, 300, 300, 900, 1500, 1200, 600],
@@ -87,10 +87,9 @@
     myChart.resize();
   });
 
-  // 数据变化
+  // 无数据变化
   var dataAll = [
-    { year: "2019", data: [200, 300, 300, 900, 1500, 1200, 600] },
-    { year: "2020", data: [300, 400, 350, 800, 1800, 1400, 700] }
+    [200, 300, 300, 900, 1500, 1200, 600]
   ];
 
   document.querySelector(".bar h2").addEventListener("click", function (e) {
@@ -189,19 +188,12 @@
     },
     series: [
       {
-        name: "新增项目",
+        name: "Votes for SG",
         type: "line",
         stack: "总量",
         // 是否让线条圆滑显示
         smooth: true,
         data: data.year[0]
-      },
-      {
-        name: "新增技能",
-        type: "line",
-        stack: "总量",
-        smooth: true,
-        data: data.year[1]
       }
     ]
   };
@@ -234,7 +226,7 @@
       top: "90%",
       itemWidth: 10,
       itemHeight: 10,
-      data: ["0岁以下", "20-29岁", "30-39岁", "40-49岁", "50岁以上"],
+      data: ["Africa", "Antarctica", "Asia", "Europe", "North America","South America","Australia"],
       textStyle: {
         color: "rgba(255,255,255,.5)",
         fontSize: "12"
@@ -260,11 +252,13 @@
         label: { show: false },
         labelLine: { show: false },
         data: [
-          { value: 1, name: "0岁以下" },
-          { value: 4, name: "20-29岁" },
-          { value: 2, name: "30-39岁" },
-          { value: 2, name: "40-49岁" },
-          { value: 1, name: "50岁以上" }
+          { value: 4, name: "Africa" },
+          { value: 4, name: "Antarctica" },
+          { value: 2, name: "Asia" },
+          { value: 2, name: "Europe" },
+          { value: 1, name: "North America" },
+          { value: 1, name: "South America" },
+          { value: 1, name: "Australia" }                   
         ]
       }
     ]
@@ -281,15 +275,15 @@
   // 基于准备好的dom，初始化echarts实例
   var myChart = echarts.init(document.querySelector(".bar1 .chart"));
 
-  var data = [90, 80, 75, 65, 65];
-  var titlename = ["javascript", "VUE", "jQuery", "HTML5", "CSS3"];
-  var valdata = ["精通", "熟练", "熟练", "掌握", "掌握"];
-  var myColor = ["#1089E7", "#F57474", "#56D0E3", "#F8B448", "#8B78F6"];
+  var data = [90, 80, 75, 65, 60, 55, 50];
+  var titlename = ["FR", "DE", "IT", "JP", "US" , "UK", "CA"];
+  var valdata = ["Max", "Opt", "Sub", "Mod", "Lim", "Neg", "Min"];
+  var myColor = ["#1089E7", "#F57474", "#56D0E3", "#F8B448", "#8B78F6", "#E6E6FA", "#708090"];
   option = {
     //图标位置
-    grid: {
+    grid: { 
       top: "10%",
-      left: "22%",
+      left: "20%",
       bottom: "10%"
     },
     xAxis: {
@@ -367,7 +361,7 @@
         type: "bar",
         yAxisIndex: 1,
         barCategoryGap: 50,
-        data: [100, 100, 100, 100, 100],
+        data: [100, 100, 100, 100, 100, 100, 100],
         barWidth: 15,
         itemStyle: {
           normal: {
@@ -377,275 +371,6 @@
             barBorderRadius: 15
           }
         }
-      }
-    ]
-  };
-
-  // 使用刚指定的配置项和数据显示图表。
-  myChart.setOption(option);
-  window.addEventListener("resize", function () {
-    myChart.resize();
-  });
-})();
-// 折线图 优秀作品
-(function () {
-  // 基于准备好的dom，初始化echarts实例
-  var myChart = echarts.init(document.querySelector(".line1 .chart"));
-
-  option = {
-    tooltip: {
-      trigger: "axis",
-      axisPointer: {
-        lineStyle: {
-          color: "#dddc6b"
-        }
-      }
-    },
-    legend: {
-      top: "0%",
-      textStyle: {
-        color: "rgba(255,255,255,.5)",
-        fontSize: "12"
-      }
-    },
-    grid: {
-      left: "10",
-      top: "30",
-      right: "10",
-      bottom: "10",
-      containLabel: true
-    },
-
-    xAxis: [
-      {
-        type: "category",
-        boundaryGap: false,
-        axisLabel: {
-          textStyle: {
-            color: "rgba(255,255,255,.6)",
-            fontSize: 12
-          }
-        },
-        axisLine: {
-          lineStyle: {
-            color: "rgba(255,255,255,.2)"
-          }
-        },
-
-        data: [
-          "01",
-          "02",
-          "03",
-          "04",
-          "05",
-          "06",
-          "07",
-          "08",
-          "09",
-          "11",
-          "12",
-          "13",
-          "14",
-          "15",
-          "16",
-          "17",
-          "18",
-          "19",
-          "20",
-          "21",
-          "22",
-          "23",
-          "24",
-          "25",
-          "26",
-          "27",
-          "28",
-          "29",
-          "30"
-        ]
-      },
-      {
-        axisPointer: { show: false },
-        axisLine: { show: false },
-        position: "bottom",
-        offset: 20
-      }
-    ],
-
-    yAxis: [
-      {
-        type: "value",
-        axisTick: { show: false },
-        axisLine: {
-          lineStyle: {
-            color: "rgba(255,255,255,.1)"
-          }
-        },
-        axisLabel: {
-          textStyle: {
-            color: "rgba(255,255,255,.6)",
-            fontSize: 12
-          }
-        },
-
-        splitLine: {
-          lineStyle: {
-            color: "rgba(255,255,255,.1)"
-          }
-        }
-      }
-    ],
-    series: [
-      {
-        name: "流入",
-        type: "line",
-        smooth: true,
-        symbol: "circle",
-        symbolSize: 5,
-        showSymbol: false,
-        lineStyle: {
-          normal: {
-            color: "#0184d5",
-            width: 2
-          }
-        },
-        areaStyle: {
-          normal: {
-            color: new echarts.graphic.LinearGradient(
-              0,
-              0,
-              0,
-              1,
-              [
-                {
-                  offset: 0,
-                  color: "rgba(1, 132, 213, 0.4)"
-                },
-                {
-                  offset: 0.8,
-                  color: "rgba(1, 132, 213, 0.1)"
-                }
-              ],
-              false
-            ),
-            shadowColor: "rgba(0, 0, 0, 0.1)"
-          }
-        },
-        itemStyle: {
-          normal: {
-            color: "#0184d5",
-            borderColor: "rgba(221, 220, 107, .1)",
-            borderWidth: 12
-          }
-        },
-        data: [
-          30,
-          40,
-          30,
-          40,
-          30,
-          40,
-          30,
-          60,
-          20,
-          40,
-          20,
-          40,
-          30,
-          40,
-          30,
-          40,
-          30,
-          40,
-          30,
-          60,
-          20,
-          40,
-          20,
-          40,
-          30,
-          60,
-          20,
-          40,
-          20,
-          40
-        ]
-      },
-      {
-        name: "流出",
-        type: "line",
-        smooth: true,
-        symbol: "circle",
-        symbolSize: 5,
-        showSymbol: false,
-        lineStyle: {
-          normal: {
-            color: "#00d887",
-            width: 2
-          }
-        },
-        areaStyle: {
-          normal: {
-            color: new echarts.graphic.LinearGradient(
-              0,
-              0,
-              0,
-              1,
-              [
-                {
-                  offset: 0,
-                  color: "rgba(0, 216, 135, 0.4)"
-                },
-                {
-                  offset: 0.8,
-                  color: "rgba(0, 216, 135, 0.1)"
-                }
-              ],
-              false
-            ),
-            shadowColor: "rgba(0, 0, 0, 0.1)"
-          }
-        },
-        itemStyle: {
-          normal: {
-            color: "#00d887",
-            borderColor: "rgba(221, 220, 107, .1)",
-            borderWidth: 12
-          }
-        },
-        data: [
-          50,
-          30,
-          50,
-          60,
-          10,
-          50,
-          30,
-          50,
-          60,
-          40,
-          60,
-          40,
-          80,
-          30,
-          50,
-          60,
-          10,
-          50,
-          30,
-          70,
-          20,
-          50,
-          10,
-          40,
-          50,
-          30,
-          70,
-          20,
-          50,
-          10,
-          40
-        ]
       }
     ]
   };
@@ -684,26 +409,24 @@
       "#ff9f7f",
       "#0096ff",
       "#9fe6b8",
-      "#32c5e9",
-      "#1d9dff"
+      "#32c5e9"
     ],
     series: [
       {
-        name: "点位统计",
+        name: "Number",
         type: "pie",
         // 如果radius是百分比则必须加引号
         radius: ["10%", "70%"],
         center: ["50%", "42%"],
         roseType: "radius",
         data: [
-          { value: 20, name: "西安" },
-          { value: 26, name: "北京" },
-          { value: 24, name: "上海" },
-          { value: 25, name: "其他" },
-          { value: 20, name: "武汉" },
-          { value: 25, name: "杭州" },
-          { value: 30, name: "深圳" },
-          { value: 42, name: "广州" }
+          { value: 20, name: "FR" },
+          { value: 26, name: "DE" },
+          { value: 24, name: "IT" },
+          { value: 25, name: "JP" },
+          { value: 20, name: "US" },
+          { value: 25, name: "UK" },
+          { value: 30, name: "CA" }
         ],
         // 修饰饼形图文字相关的样式 label对象
         label: {
