@@ -79,20 +79,24 @@ def binary_search_places(places, target_country, target_weather, low, high):
         return []
 
     mid = (low + high) // 2
-    if places[mid].country.lower() == target_country.lower() and places[mid].weather.lower() == target_weather.lower():
+    country_matches = target_country is None or places[mid].country.lower() == target_country.lower()
+    weather_matches = target_weather is None or places[mid].weather.lower() == target_weather.lower()
+
+    if country_matches and weather_matches:
         results = [places[mid]]
-        # 向左查找所有匹配项
+
         left = mid - 1
         while left >= low and places[left].country.lower() == target_country.lower() and places[left].weather.lower() == target_weather.lower():
             results.insert(0, places[left])
             left -= 1
-        # 向右查找所有匹配项
+
         right = mid + 1
         while right <= high and places[right].country.lower() == target_country.lower() and places[right].weather.lower() == target_weather.lower():
             results.append(places[right])
             right += 1
         return results
-    elif (places[mid].country.lower(), places[mid].weather.lower()) < (target_country.lower(), target_weather.lower()):
+    elif places[mid].country.lower() < (target_country or '').lower() or places[mid].weather.lower() < (
+                    target_weather or '').lower():
         return binary_search_places(places, target_country, target_weather, mid + 1, high)
     else:
         return binary_search_places(places, target_country, target_weather, low, mid - 1)

@@ -75,15 +75,16 @@ def view_places():
             filtered_places = []
             if filter_country and filter_weather:
                 print('1')
+                print(filtered_places,filter_country)
                 filtered_places = model.binary_search_places(place_list, filter_country, filter_weather, 0,
                                                              len(place_list) - 1)
             elif filter_country:
                 print('2')
-                filtered_places = model.binary_search_places(place_list, filter_country, '', 0, len(place_list) - 1)
+                filtered_places = model.binary_search_places(place_list, filter_country, None, 0, len(place_list) - 1)
 
             elif filter_weather:
                 print('3')
-                filtered_places = model.binary_search_places(place_list, '', filter_weather, 0, len(place_list) - 1)
+                filtered_places = model.binary_search_places(place_list, None, filter_weather, 0, len(place_list) - 1)
                 print(filtered_places)
 
 
