@@ -33,7 +33,7 @@ def findUserHistory(username):
     if userdata and len(userdata) > 1:
         quickSort(userdata,0,len(userdata) - 1,lambda x:x.username)
 
-    target_index = binary_search(userdata,0,len(userdata)-1,username,key=lambda x:x.username if not isinstance(x, str) else x)
+    target_index = binary_search_all(userdata,0,len(userdata)-1,username,key=lambda x:x.username if not isinstance(x, str) else x)
 
 
     history_records = []
@@ -41,9 +41,10 @@ def findUserHistory(username):
     if target_index== -1:
         return history_records
 
-    userhistory = userdata[target_index].linked_places
-    for i in userhistory:
-        history_records.append((i.place_name,i.feedback))
+    for index in target_index:
+        userhistory = userdata[index].linked_places
+        for record in userhistory:
+            history_records.append((record.place_name, record.feedback))
     return history_records
 
 # Search for filtered places
@@ -103,7 +104,6 @@ def createVote(user_name,voted_place,feedback,place_list):
         existing_user.linked_places.append(UserLinkedPlace(voted_place, feedback))
 
     else:
-
         new_user = User(user_name)
         new_user.linked_places.append(UserLinkedPlace(voted_place, feedback))
         userdata.append(new_user)
@@ -124,9 +124,9 @@ def findUserVoteHistory(username, voted_place_name):
         print(user.username)
         if username == user.username:
             print('User Exists')
-            quickSort(user.linked_places, 0, len(user.linked_places) - 1, key=lambda x: x.place_name)
+            quickSort(user.linked_places, 0, len(user.linked_places) - 1, lambda x: x.place_name)
             linked_places_sorted = sorted(user.linked_places, key=lambda x: x.place_name)
-            place_index = binary_search(linked_places_sorted, 0, len(linked_places_sorted) - 1, voted_place_name,
+            place_index = binary_search_all(linked_places_sorted, 0, len(linked_places_sorted) - 1, voted_place_name,
                                             key=lambda x: x.place_name if not isinstance(x, str) else x)
 
             return place_index != -1
