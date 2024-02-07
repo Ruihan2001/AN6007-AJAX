@@ -129,7 +129,7 @@ def findUserVoteHistory(username, voted_place_name):
 
 # top 10 voted country
 def findTop10(place_list):
-    quickSort(place_list,0,len(place_list)-1,lambda x:x.total_votes)
+    quickSort(place_list,0,len(place_list)-1,lambda x:str(x.total_votes))
     top_place_list = place_list[-10:]
     top_place_name = []
     top_place_votes = []

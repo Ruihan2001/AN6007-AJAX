@@ -130,7 +130,10 @@ def vote():
     return render_template("vote.html")
 @app.route('/analysis',methods=['GET','POST'])
 def analysis():
-    return render_template("analysis.html")
+    top_place_names, top_place_votes = model.findTop10(place_list)
+    map = model.prepareMap(place_list)
+
+    return render_template("analysis.html",top_place_names=top_place_names, top_place_votes=top_place_votes,map_data = map)
 
 
 if __name__ == '__main__':
