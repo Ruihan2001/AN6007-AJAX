@@ -92,6 +92,7 @@ def history():
             print(history_records)
             return jsonify(history_records=history_records)
         else:
+            print('No related results! Please enter the correct username or re-vote!', 'danger')
             flash('No related results! Please enter the correct username or re-vote!', 'danger')
             return jsonify(error='No related results')
     else:
@@ -104,7 +105,7 @@ def vote():
         user_name = request.form.get('username3')
         voted_place = request.form.get('votedplace')
         feedback = request.form.get('feedback')
-        print(user_name,voted_place,feedback)
+        print("vote info:",user_name,voted_place,feedback)
         vote_history_records = model.findUserVoteHistory(user_name,voted_place)
         # print(vote_history_records)
         if vote_history_records:
@@ -118,8 +119,8 @@ def vote():
             model.createVote(user_name, voted_place, feedback, place_list)
             remark.append([user_name, voted_place, feedback])
             model.update_vote_history_file(remark)
-            place.total_votes += 1
-            place.all_feedback.append(feedback)
+            # place.total_votes += 1
+            # place.all_feedback.append(feedback)
             # Update places.txt with the new state of all places
             model.update_places_file(place_list)
 

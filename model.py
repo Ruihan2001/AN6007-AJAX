@@ -121,9 +121,7 @@ def createVote(user_name,voted_place,feedback,place_list):
 # search history
 def findUserVoteHistory(username, voted_place_name):
     for user in userdata:
-        print(user.username)
         if username == user.username:
-            print('User Exists')
             quickSort(user.linked_places, 0, len(user.linked_places) - 1, lambda x: x.place_name)
             linked_places_sorted = sorted(user.linked_places, key=lambda x: x.place_name)
             place_index = binary_search_all(linked_places_sorted, 0, len(linked_places_sorted) - 1, voted_place_name,
@@ -252,7 +250,7 @@ def update_places_file(place_list):
                 f"{place.name},{place.country},{place.weather},{place.description},{place.total_votes},{feedback_str}\n")
 
 def update_vote_history_file(remark):
-    with open('vote_history.txt', 'w', encoding='utf-8') as file:
+    with open('vote_history.txt', 'a', encoding='utf-8') as file:
         for entry in remark:
             user_name, voted_place, feedback = entry
             file.write(f"{user_name},{voted_place},{feedback}\n")
