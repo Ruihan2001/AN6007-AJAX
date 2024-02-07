@@ -124,34 +124,15 @@ def findUserVoteHistory(username, voted_place_name):
         print(user.username)
         if username == user.username:
             print('User Exists')
-            quicksort(user.linked_places, 0, len(user.linked_places) - 1, key=lambda x: x.place_name)
+            quickSort(user.linked_places, 0, len(user.linked_places) - 1, key=lambda x: x.place_name)
             linked_places_sorted = sorted(user.linked_places, key=lambda x: x.place_name)
-            place_index = binary_search_new(linked_places_sorted, 0, len(linked_places_sorted) - 1, voted_place_name,
-                                            key=lambda x: x.place_name)
+            place_index = binary_search(linked_places_sorted, 0, len(linked_places_sorted) - 1, voted_place_name,
+                                            key=lambda x: x.place_name if not isinstance(x, str) else x)
 
             return place_index != -1
         else:
             continue
     return False
-
-def binary_search_new(arr, low, high, x, key=lambda x: x):
-    if high >= low:
-        mid = (high + low) // 2
-        if key(arr[mid]) == x:
-            return mid
-        elif key(arr[mid]) > x:
-            return binary_search_new(arr, low, mid - 1, x, key)
-        else:
-            return binary_search_new(arr, mid + 1, high, x, key)
-    else:
-        return -1
-
-def quicksort(arr, low, high, key=lambda x: x):
-    if low < high:
-        pi = partition(arr, low, high, key)
-        quicksort(arr, low, pi-1, key)
-        quicksort(arr, pi+1, high, key)
-
 
 def partition(array, low, high,key = lambda x:x):
   pivot = key(array[high]).lower()
@@ -165,7 +146,7 @@ def partition(array, low, high,key = lambda x:x):
 
 
 
-# Basic binary search
+# binary search
 def partition(array, low, high,key = lambda x:x):
   pivot = key(array[high]).lower()
   i = low - 1
