@@ -17,7 +17,6 @@ class Place:
         self.total_votes = 0
         self.all_feedback = []
 
-userdata = []
 class Place:
     def __init__(self, name, country, weather, description):
         self.name = name
@@ -28,20 +27,19 @@ class Place:
         self.all_feedback = []
 
 
-def findUserHistory(username):
+def findUserHistory(username,userdata):
     if userdata and len(userdata) > 1:
         quickSort(userdata,0,len(userdata) - 1,lambda x:x.username)
 
-    target_index = binary_search_all(userdata,0,len(userdata)-1,username,key=lambda x:x.username if not isinstance(x, str) else x)
+    user_index = binary_search_all(userdata,0,len(userdata)-1,username,key=lambda x:x.username if not isinstance(x, str) else x)
 
 
     history_records = []
 
-    if target_index== -1:
+    if not user_index:
         return history_records
-
-    for index in target_index:
-        userhistory = userdata[index].linked_places
+    else:
+        userhistory = userdata[user_index[0]].linked_places
         for record in userhistory:
             history_records.append((record.place_name, record.feedback))
     return history_records
@@ -96,37 +94,54 @@ def binary_search_places(places, target_country, target_weather, low, high):
 
 
 # Vote
-def createVote(user_name,voted_place,feedback,place_list):
+def createVote(user_name,voted_place,feedback,place_list,userdata):
     quickSort(place_list,0,len(place_list)-1,lambda x:x.name)
-    index = binary_search_all(place_list,0,len(place_list)-1,voted_place,lambda x:x.name if not isinstance(x, str) else x)
+    place_index = binary_search_all(place_list,0,len(place_list)-1,voted_place,lambda x:x.name if not isinstance(x, str) else x)
 
-    if not index:
-        return(0)
+    if not place_index:
+        return 0
     else:
-        place_list[index[0]].total_votes += 1
-        place_list[index[0]].all_feedback.append(feedback)
-        print(place_list.all_feedback)
-    
         quickSort(userdata,0,len(userdata)-1,lambda x:x.username)
-        index = binary_search_all(userdata,0,len(userdata)-1,user_name,lambda x:x.username if not isinstance(x, str) else x)
-        if not index:
+        user_index = binary_search_all(userdata,0,len(userdata)-1,user_name,lambda x:x.username if not isinstance(x, str) else x)
+        if not user_index:
             user = User(user_name)
             user.linked_places.append(UserLinkedPlace(voted_place,feedback))
             userdata.append(user)
+
+            place_list[place_index[0]].total_votes += 1
+            place_list[place_index[0]].all_feedback.append(feedback)     
         else:
-            userdata[index[0]].linked_places.append(UserLinkedPlace(voted_place,feedback))
-        
-        return(1)
+            user_linked_place = userdata[user_index[0]].linked_places
+            quickSort(user_linked_place,0,len(user_linked_place)-1,lambda x:x.place_name)
+            linked_place_index = binary_search_all(user_linked_place,0,len(user_linked_place)-1,voted_place,lambda x:x.place_name if not isinstance(x, str) else x)
+            if not linked_place_index:
+                userdata[user_index[0]].linked_places.append(UserLinkedPlace(voted_place,feedback))
+
+                place_list[place_index[0]].total_votes += 1
+                place_list[place_index[0]].all_feedback.append(feedback)
+            else:
+                return 1
     
 
 
 # search history
-def findUserVoteHistory(username, voted_place_name):
-    user = next((u for u in userdata if u.username == username), None)
+# def findUserVoteHistory(username,userdata):
+#     if userdata and len(userdata) > 1:
+#         quickSort(userdata,0,len(userdata) - 1,lambda x:x.username)
 
-    if user:
-        return any(lp.place_name == voted_place_name for lp in user.linked_places)
-    return False
+#     target_index = binary_search_all(userdata,0,len(userdata)-1,username,key=lambda x:x.username if not isinstance(x, str) else x)
+
+
+#     history_records = [] 
+
+#     if not target_index:
+#         return 1
+#     else:
+#         userhistory = userdata[target_index[0]].linked_places
+#         for record in userhistory:
+#             history_records.append((record.place_name, record.feedback))
+#     return history_records
+
 
 
 # top 10 voted country

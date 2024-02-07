@@ -87,7 +87,7 @@ def view_places():
 def history():
     if request.method == 'POST':
         user_name = request.form.get('username2')
-        history_records = model.findUserHistory(str(user_name))
+        history_records = model.findUserHistory(str(user_name),userdata)
         if history_records:
             print(history_records)
             return jsonify(history_records=history_records)
@@ -105,19 +105,20 @@ def vote():
         user_name = request.form.get('username3')
         voted_place = request.form.get('votedplace')
         feedback = request.form.get('feedback')
-        print("vote info:",user_name,voted_place,feedback)
-        vote_history_records = model.findUserVoteHistory(user_name,voted_place)
+        # vote_history_records = model.findUserVoteHistory(user_name,voted_place)
         # print(vote_history_records)
-        if vote_history_records:
+        # if vote_history_records:
             # flash("You already voted", 'danger')
-            return jsonify(error='You already voted')
-
-
+            # return jsonify(error='You already voted')
+        
         # flash("Feedback added successfully", 'success')
-        place_search = model.createVote(user_name, voted_place, feedback, place_list)
+        place_search = model.createVote(user_name, voted_place, feedback, place_list,userdata)
         if place_search == 0:
             return jsonify(error='Error: Place not found.')
+        elif place_search == 1:
+            return jsonify(error='Error: You already voted for this place')
         else:
+            print("vote info:",user_name,voted_place,feedback)
             remark.append([user_name, voted_place, feedback])
             model.update_users_file(remark)
             # Update places.txt with the new state of all places
