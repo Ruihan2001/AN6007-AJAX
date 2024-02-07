@@ -367,11 +367,13 @@
                                 '<tbody>';
 
                 if(response.history_records && response.history_records.length > 0) {
-                    response.history_records.forEach(function(record) {
+                    response.history_records.forEach(function(records) {
+                        records.forEach(function (record){
                         tableHTML += '<tr>' +
                                      '<td>' + record[0] + '</td>' +
                                      '<td>' + record[1] + '</td>' +
                                      '</tr>';
+                        });
                     });
                 } else {
                     tableHTML += '<tr>' +
