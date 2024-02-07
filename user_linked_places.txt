@@ -1,2 +1,2 @@
-ruihan,Chengdu,delicious
-ruiyang,Hongkong,expensive
+ruihan,chengdu,good
+yubin,tianjin,3
