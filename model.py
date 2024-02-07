@@ -231,6 +231,10 @@ def load_data_from_files(user_file='users.txt', places_file='places.txt', user_l
             user = next((user for user in userdata if user.username == username), None)
             if user:
                 user.linked_places.append(UserLinkedPlace(place_name, feedback))
+            else:
+                new_user = User(username)
+                new_user.linked_places.append(UserLinkedPlace(place_name, feedback))
+                userdata.append(new_user)
 
 
     return userdata,places
