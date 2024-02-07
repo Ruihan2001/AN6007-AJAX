@@ -1,2 +1,2 @@
-chengdu,china,bad,,1,good
-tianjin,China,Nice,,1,3
+chengdu|china|bad||1|good
+tianjin|China|Nice||1|perfect

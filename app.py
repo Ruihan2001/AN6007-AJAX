@@ -114,20 +114,18 @@ def vote():
 
 
         # flash("Feedback added successfully", 'success')
-        place = next((p for p in place_list if p.name == voted_place), None)
-        if place:
-            model.createVote(user_name, voted_place, feedback, place_list)
+        place_search = model.createVote(user_name, voted_place, feedback, place_list)
+        if place_search == 0:
+            return jsonify(error='Error: Place not found.')
+        else:
             remark.append([user_name, voted_place, feedback])
-            model.update_vote_history_file(remark)
-            # place.total_votes += 1
-            # place.all_feedback.append(feedback)
+            model.update_users_file(remark)
             # Update places.txt with the new state of all places
             model.update_places_file(place_list)
-
             return jsonify(success="Feedback added successfully")
 
-
     return render_template("vote.html")
+
 @app.route('/analysis',methods=['GET','POST'])
 def analysis():
     return render_template("analysis.html")

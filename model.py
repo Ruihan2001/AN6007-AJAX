@@ -17,7 +17,6 @@ class Place:
         self.total_votes = 0
         self.all_feedback = []
 
-# Store user
 userdata = []
 class Place:
     def __init__(self, name, country, weather, description):
@@ -98,25 +97,28 @@ def binary_search_places(places, target_country, target_weather, low, high):
 
 # Vote
 def createVote(user_name,voted_place,feedback,place_list):
-    existing_user = next((user for user in userdata if user.username == user_name), None)
+    quickSort(place_list,0,len(place_list)-1,lambda x:x.name)
+    index = binary_search_all(place_list,0,len(place_list)-1,voted_place,lambda x:x.name if not isinstance(x, str) else x)
 
-    if existing_user:
-        existing_user.linked_places.append(UserLinkedPlace(voted_place, feedback))
-
+    if not index:
+        return(0)
     else:
-        new_user = User(user_name)
-        new_user.linked_places.append(UserLinkedPlace(voted_place, feedback))
-        userdata.append(new_user)
+        place_list[index[0]].total_votes += 1
+        place_list[index[0]].all_feedback.append(feedback)
+        print(place_list.all_feedback)
+    
+        quickSort(userdata,0,len(userdata)-1,lambda x:x.username)
+        index = binary_search_all(userdata,0,len(userdata)-1,user_name,lambda x:x.username if not isinstance(x, str) else x)
+        if not index:
+            user = User(user_name)
+            user.linked_places.append(UserLinkedPlace(voted_place,feedback))
+            userdata.append(user)
+        else:
+            userdata[index[0]].linked_places.append(UserLinkedPlace(voted_place,feedback))
+        
+        return(1)
+    
 
-    voted_place = next((place for place in place_list if place.name == voted_place), None)
-    if voted_place:
-        voted_place.total_votes += 1
-        voted_place.all_feedback.append(feedback)
-        print(voted_place.all_feedback)
-    else:
-        print("Error: Place not found.")
-
-    return 'ok'
 
 # search history
 def findUserVoteHistory(username, voted_place_name):
@@ -207,35 +209,31 @@ def binary_search_all(arr, low, high, x, key=lambda x: x if not isinstance(x, st
     return result
 
 # Load data
-def load_data_from_files(user_file='users.txt', places_file='places.txt', user_linked_places_file='user_linked_places.txt'):
+def load_data_from_files(user_file='users.txt', places_file='places.txt'):
     userdata = []
     places = []
 
     with open(user_file, 'r', encoding='utf-8') as file:
         for line in file:
-            username = line.strip()
-            userdata.append(User(username))
+            username, place_name, feedback = line.strip().split('|')
+            quickSort(userdata,0,len(userdata)-1,lambda x:x.username)
+            index = binary_search_all(userdata,0,len(userdata)-1,username,lambda x:x.username if not isinstance(x, str) else x)
+            if not index:
+                user = User(username)
+                user.linked_places.append(UserLinkedPlace(place_name,feedback))
+                userdata.append(user)
+            else:
+                userdata[index[0]].linked_places.append(UserLinkedPlace(place_name,feedback))
+
 
     with open(places_file, 'r', encoding='utf-8') as file:
         for line in file:
-            name, country, weather, description, total_votes, feedback_str = line.strip().split(',')
+            name, country, weather, description, total_votes, feedback_str = line.strip().split('|')
             feedback_list = feedback_str.split(';') if feedback_str else []
             place = Place(name, country, weather, description)
             place.total_votes = int(total_votes)
             place.all_feedback = feedback_list
             places.append(place)
-
-    with open(user_linked_places_file, 'r', encoding='utf-8') as file:
-        for line in file:
-            username, place_name, feedback = line.strip().split(',')
-            user = next((user for user in userdata if user.username == username), None)
-            if user:
-                user.linked_places.append(UserLinkedPlace(place_name, feedback))
-            else:
-                new_user = User(username)
-                new_user.linked_places.append(UserLinkedPlace(place_name, feedback))
-                userdata.append(new_user)
-
 
     return userdata,places
 
@@ -246,10 +244,13 @@ def update_places_file(place_list):
         for place in place_list:
             feedback_str = ";".join(place.all_feedback)  # Join all feedback with ';'
             file.write(
-                f"{place.name},{place.country},{place.weather},{place.description},{place.total_votes},{feedback_str}\n")
+                f"{place.name}|{place.country}|{place.weather}|{place.description}|{place.total_votes}|{feedback_str}\n")
 
-def update_vote_history_file(remark):
-    with open('vote_history.txt', 'a', encoding='utf-8') as file:
+def update_users_file(remark):
+    with open('users.txt', 'a', encoding='utf-8') as file:
         for entry in remark:
             user_name, voted_place, feedback = entry
-            file.write(f"{user_name},{voted_place},{feedback}\n")
+            file.write(f"{user_name}|{voted_place}|{feedback}\n")
+
+# userdata,place_list = load_data_from_files()
+# print(vars(place_list[1]))

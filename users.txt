@@ -1,3 +1,4 @@
-ruihan
-ruiyang
-yubin
+ruihan|chengdu|good
+ruiyang|wuhan|good
+yubin|chengdu|hot
+ruihan|beijing|crowded
