@@ -145,6 +145,17 @@ def findTop10(place_list):
         top_place_name.append(place.name)
     return top_place_name, top_place_votes
 
+# map data
+def prepareMap(place_list):
+    abb_country = [['AE', 'United Arab Emirates'], ['AF', 'Afghanistan'], ['AL', 'Albania'], ['AM', 'Armenia'], ['AO', 'Angola'], ['AR', 'Argentina'], ['AT', 'Austria'], ['AU', 'Australia'], ['AZ', 'Azerbaijan'], ['BA', 'Bosnia and Herzegovina'], ['BD', 'Bangladesh'], ['BE', 'Belgium'], ['BF', 'Burkina Faso'], ['BG', 'Bulgaria'], ['BI', 'Burundi'], ['BJ', 'Benin'], ['BN', 'Brunei Darussalam'], ['BO', 'Plurinational State of Bolivia'], ['BR', 'Brazil'], ['BT', 'Bhutan'], ['BW', 'Botswana'], ['BY', 'Belarus'], ['BZ', 'Belize'], ['CA', 'Canada'], ['CD', 'The Democratic Republic of the Congo'], ['CF', 'Central African Republic'], ['CG', 'Congo'], ['CH', 'Switzerland'], ['CI', 'Ivory Coast'], ['CL', 'Chile'], ['CM', 'Cameroon'], ['CN', 'China'], ['CO', 'Colombia'], ['CR', 'Costa Rica'], ['CU', 'Cuba'], ['CY', 'Cyprus'], ['CZ', 'Czech Republic'], ['DE', 'Germany'], ['DJ', 'Djibouti'], ['DK', 'Denmark'], ['DO', 'Dominican Republic'], ['DZ', 'Algeria'], ['EC', 'Ecuador'], ['EE', 'Estonia'], ['EG', 'Egypt'], ['EH', 'Western Sahara'], ['ER', 'Eritrea'], ['ES', 'Spain'], ['ET', 'Ethiopia'], ['FI', 'Finland'], ['FJ', 'Fiji'], ['FK', 'Falkland Islands (Malvinas)'], ['FR', 'France'], ['GA', 'Gabon'], ['GB', 'United Kingdom'], ['GE', 'Georgia'], ['GF', 'French Guiana'], ['GH', 'Ghana'], ['GL', 'Greenland'], ['GM', 'Gambia'], ['GN', 'Guinea'], ['GQ', 'Equatorial Guinea'], ['GR', 'Greece'], ['GT', 'Guatemala'], ['GW', 'Guinea-Bissau'], ['GY', 'Guyana'], ['HN', 'Honduras'], ['HR', 'Croatia'], ['HT', 'Haiti'], ['HU', 'Hungary'], ['ID', 'Indonesia'], ['IE', 'Ireland'], ['IL', 'Israel'], ['IN', 'India'], ['IQ', 'Iraq'], ['IR', 'Islamic Republic of Iran'], ['IS', 'Iceland'], ['IT', 'Italy'], ['JM', 'Jamaica'], ['JO', 'Jordan'], ['JP', 'Japan'], ['KE', 'Kenya'], ['KG', 'Kyrgyzstan'], ['KH', 'Cambodia'], ['KP', 'Democratic People’s Republic of Korea'], ['KR', 'Republic of Korea'], ['KW', 'Kuwait'], ['KZ', 'Kazakhstan'], ['LA', 'Lao People’s Democratic Republic'], ['LB', 'Lebanon'], ['LK', 'Sri Lanka'], ['LR', 'Liberia'], ['LS', 'Lesotho'], ['LT', 'Lithuania'], ['LU', 'Luxembourg'], ['LV', 'Latvia'], ['LY', 'Libyan Arab Jamahiriya'], ['MA', 'Morocco'], ['MD', 'Republic of Moldova'], ['MG', 'Madagascar'], ['MK', 'The Former Yugoslav Republic of Macedonia'], ['ML', 'Mali'], ['MM', 'Myanmar'], ['MN', 'Mongolia'], ['MR', 'Mauritania'], ['MW', 'Malawi'], ['MX', 'Mexico'], ['MY', 'Malaysia'], ['MZ', 'Mozambique'], ['NA', 'Namibia'], ['NC', 'New Caledonia'], ['NE', 'Niger'], ['NG', 'Nigeria'], ['NI', 'Nicaragua'], ['NL', 'Netherlands'], ['NO', 'Norway'], ['NP', 'Nepal'], ['NZ', 'New Zealand'], ['OM', 'Oman'], ['PA', 'Panama'], ['PE', 'Peru'], ['PG', 'Papua New Guinea'], ['PH', 'Philippines'], ['PK', 'Pakistan'], ['PL', 'Poland'], ['PR', 'Puerto Rico'], ['PS', 'Occupied Palestinian Territory'], ['PT', 'Portugal'], ['PY', 'Paraguay'], ['QA', 'Qatar'], ['RO', 'Romania'], ['RS', 'Serbia'], ['RU', 'Russian Federation'], ['RW', 'Rwanda'], ['SA', 'Saudi Arabia'], ['SB', 'Solomon Islands'], ['SD', 'Sudan'], ['SE', 'Sweden'], ['SJ', 'Svalbard and Jan Mayen'], ['SK', 'Slovakia'], ['SL', 'Sierra Leone'], ['SN', 'Senegal'], ['SO', 'Somalia'], ['SR', 'Suriname'], ['SV', 'El Salvador'], ['SY', 'Syrian Arab Republic'], ['SZ', 'Swaziland'], ['TD', 'Chad'], ['TG', 'Togo'], ['TH', 'Thailand'], ['TJ', 'Tajikistan'], ['TL', 'Timor-Leste'], ['TM', 'Turkmenistan'], ['TN', 'Tunisia'], ['TR', 'Turkey'], ['TZ', 'United Republic of Tanzania'], ['UA', 'Ukraine'], ['UG', 'Uganda'], ['US', 'United States'], ['UY', 'Uruguay'], ['UZ', 'Uzbekistan'], ['VE', 'Bolivarian Republic of Venezuela'], ['VN', 'Viet Nam'], ['VU', 'Vanuatu'], ['YE', 'Yemen'], ['ZA', 'South Africa'], ['ZM', 'Zambia'], ['ZW', 'Zimbabwe']]
+    quickSort(place_list,0,len(place_list)-1,lambda x:x.country)
+    map_data = {}
+    for country in abb_country:
+        index = binary_search(place_list, 0, len(place_list) - 1, country[1] , key = lambda x:x if not isinstance(x, str) else x)
+        
+        map_data[country[0]] = place_list[index].
+
+
 
 # binary search
 def partition(array, low, high,key = lambda x:x):
@@ -170,28 +181,33 @@ def quickSort(array, low, high, get_string):
     quickSort(array, pi + 1, high,get_string)
 
 
-def binary_search(arr, low, high, x, key = lambda x:x if not isinstance(x, str) else x):
+def binary_search_all(arr, low, high, x, key=lambda x: x if not isinstance(x, str) else x):
     """
-    Please update the argument 'get_string' here in order to get the String for differnet element in array
-    the format is - lambda x: x
-    
-    If found the wanted string, the function will return the index of element in array.
-    Otherwise, the function will return -1
+    Please update the argument 'get_string' here to get the String for different elements in the array.
+    The format is - lambda x: x
+
+    If the wanted string is found, the function will return a list of indices of the element in the array.
+    Otherwise, the function will return an empty list.
     """
-    if high >= low:
-        mid = (high + low) // 2
+    result = []
+
+    def binary_search_recursive(start, end):
+        if start > end:
+            return
+
+        mid = (start + end) // 2
 
         if key(arr[mid]) == key(x):
-            return mid
-        
-        elif key(arr[mid]) > key(x):
-            return binary_search(arr, low, mid - 1, x, key)
+            result.append(mid)
 
-        else:
-            return binary_search(arr, mid + 1, high, x, key)
+        # Search left for additional occurrences
+        binary_search_recursive(start, mid - 1)
 
-    else:
-        return -1
+        # Search right for additional occurrences
+        binary_search_recursive(mid + 1, end)
+
+    binary_search_recursive(low, high)
+    return result
 
 # Load data
 def load_data_from_files(user_file='users.txt', places_file='places.txt', user_linked_places_file='user_linked_places.txt'):
