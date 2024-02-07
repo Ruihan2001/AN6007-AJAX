@@ -120,17 +120,12 @@ def createVote(user_name,voted_place,feedback,place_list):
 
 # search history
 def findUserVoteHistory(username, voted_place_name):
-    for user in userdata:
-        if username == user.username:
-            quickSort(user.linked_places, 0, len(user.linked_places) - 1, lambda x: x.place_name)
-            linked_places_sorted = sorted(user.linked_places, key=lambda x: x.place_name)
-            place_index = binary_search_all(linked_places_sorted, 0, len(linked_places_sorted) - 1, voted_place_name,
-                                            key=lambda x: x.place_name if not isinstance(x, str) else x)
+    user = next((u for u in userdata if u.username == username), None)
 
-            return place_index != -1
-        else:
-            continue
+    if user:
+        return any(lp.place_name == voted_place_name for lp in user.linked_places)
     return False
+
 
 # top 10 voted country
 def findTop10(place_list):
