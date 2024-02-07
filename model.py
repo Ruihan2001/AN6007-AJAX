@@ -134,16 +134,16 @@ def findUserVoteHistory(username, voted_place_name):
             continue
     return False
 
-def partition(array, low, high,key = lambda x:x):
-  pivot = key(array[high]).lower()
-  i = low - 1
-  for j in range(low, high):
-    if key(array[j]).lower() <= pivot:
-      i = i + 1
-      (array[i], array[j]) = (array[j], array[i])
-  (array[i + 1], array[high]) = (array[high], array[i + 1])
-  return i + 1
-
+# top 10 voted country
+def findTop10(place_list):
+    quickSort(place_list,0,len(place_list)-1,lambda x:x.total_votes)
+    top_place_list = place_list[-10:]
+    top_place_name = []
+    top_place_votes = []
+    for place in top_place_list:
+        top_place_votes.append(place.total_votes)
+        top_place_name.append(place.name)
+    return top_place_name, top_place_votes
 
 
 # binary search
