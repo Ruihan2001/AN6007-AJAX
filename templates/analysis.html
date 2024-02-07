@@ -55,7 +55,7 @@
     <div class="column">
       <div class="panel bar">
         <h2>
-          Number of votes for G7
+          Top 7 most voted locations
         </h2>
         <div class="chart"></div>
         <div class="panel-footer"></div>
@@ -97,8 +97,12 @@
 
   <script src="../static/js/map/flexible.js"></script>
  <script src="https://www.jq22.com/jquery/echarts-4.2.1.min.js"></script>
-  <script src="../static/js/map/index.js"></script>
-
+<!--  <script src="../static/js/map/index.js"></script>-->
+<script>
+    var topPlaceNames = {{ top_place_names | tojson | safe }};
+    var topPlaceVotes = {{ top_place_votes | tojson }};
+    var mapData = {{ map_data | tojson }};
+</script>
   <script>
     (function (fn) {
       fn();
@@ -113,7 +117,7 @@
   </script>
 
     <script>
-        var data = {"CN":{"value":"30.05%","index":"1","stateInitColor":"0"},"IN":{"value":"19.77%","index":"2","stateInitColor":"0"}}
+        var data = mapData;
         var i = 1;
 
 
@@ -142,7 +146,7 @@
 
                 _idx < 4 ? active = 'active' : active = '';
 
-                var tipStr = '<div class="mapInfo"><i class="' + active + '">' + _idx + '</i><span>' + obj.name + '</span><b>' + _value + '</b></div>';
+                var tipStr = '<div class="mapInfo"><span>' + obj.name + '</span><b>' + _value + '</b></div>';
 
                 return tipStr;
 
@@ -150,8 +154,100 @@
 
         });
 
-
-
-
     </script>
+   <script>
+       // 柱状图1模块
+        (function () {
+          // 实例化对象
+          var myChart = echarts.init(document.querySelector(".bar .chart"));
+          // 指定配置和数据
+          var option = {
+            color: ["#2f89cf"],
+            tooltip: {
+              trigger: "axis",
+              axisPointer: {
+                // 坐标轴指示器，坐标轴触发有效
+                type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+              }
+            },
+            grid: {
+              left: "0%",
+              top: "10px",
+              right: "0%",
+              bottom: "4%",
+              containLabel: true
+            },
+            xAxis: [
+              {
+                type: "category",
+                data: topPlaceNames,
+                axisTick: {
+                  alignWithLabel: true
+                },
+                axisLabel: {
+                  textStyle: {
+                    color: "rgba(255,255,255,.6)",
+                    fontSize: "12"
+                  }
+                },
+                axisLine: {
+                  show: false
+                }
+              }
+            ],
+            yAxis: [
+              {
+                type: "value",
+                axisLabel: {
+                  textStyle: {
+                    color: "rgba(255,255,255,.6)",
+                    fontSize: "12"
+                  }
+                },
+                axisLine: {
+                  lineStyle: {
+                    color: "rgba(255,255,255,.1)"
+                    // width: 1,
+                    // type: "solid"
+                  }
+                },
+                splitLine: {
+                  lineStyle: {
+                    color: "rgba(255,255,255,.1)"
+                  }
+                }
+              }
+            ],
+            series: [
+              {
+                name: "Number of votes",
+                type: "bar",
+                barWidth: "35%",
+                data: topPlaceVotes,
+                itemStyle: {
+                  barBorderRadius: 5
+                }
+              }
+            ]
+          };
+
+          // 把配置给实例对象
+          myChart.setOption(option);
+          window.addEventListener("resize", function () {
+            myChart.resize();
+          });
+
+          // 无数据变化
+          var dataAll = topPlaceVotes;
+
+          document.querySelector(".bar h2").addEventListener("click", function (e) {
+            var i = e.target == this.children[0] ? 0 : 1;
+            option.series[0].data = dataAll[i].data;
+            myChart.setOption(option);
+          });
+        })();
+
+   </script>
+
+
     </body>
