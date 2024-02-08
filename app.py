@@ -131,7 +131,8 @@ def analysis():
     top_place_names, top_place_votes = model.findTop10(place_list)
     map = model.prepareMap(place_list)
 
-    return render_template("analysis.html",top_place_names=top_place_names, top_place_votes=top_place_votes,map_data = map)
+    total_places_num ,total_voted_places= model.cal_number_of_places_and_votes(place_list)
+    return render_template("analysis.html",top_place_names=top_place_names, top_place_votes=top_place_votes,map_data = map,total_voted_places=total_voted_places,total_places_num=total_places_num)
 
 
 if __name__ == '__main__':

@@ -65,8 +65,8 @@
       <div class="no">
         <div class="no-hd">
           <ul>
-            <li>125811</li>
-            <li>104563</li>
+            <li id ='totalPlaces'></li>
+            <li id="totalVotedPlaces"></li>
           </ul>
         </div>
         <div class="no-bd">
@@ -102,6 +102,8 @@
     var topPlaceNames = {{ top_place_names | tojson | safe }};
     var topPlaceVotes = {{ top_place_votes | tojson }};
     var mapData = {{ map_data | tojson }};
+    var total_num = {{total_places_num| tojson}};
+    var total_voted = {{total_voted_places| tojson}}
 </script>
   <script>
     (function (fn) {
@@ -115,6 +117,13 @@
         dt.getSeconds();
     });
   </script>
+   <script>
+       document.addEventListener('DOMContentLoaded', function() {
+           document.getElementById('totalPlaces').textContent = total_num;
+           document.getElementById('totalVotedPlaces').textContent = total_voted;
+
+});
+   </script>
 
     <script>
         var data = mapData;

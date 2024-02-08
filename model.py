@@ -322,5 +322,10 @@ def update_users_file(remark):
             user_name, voted_place, feedback = entry
             file.write(f"{user_name}|{voted_place}|{feedback}\n")
 
+
+def cal_number_of_places_and_votes(place_list):
+    total_places_num = len(place_list)
+    total_voted_places = sum(1 for place in place_list if place.total_votes > 0)
+    return total_places_num,total_voted_places
 # userdata,place_list = load_data_from_files()
 # print(vars(place_list[1]))
