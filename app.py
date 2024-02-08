@@ -66,13 +66,12 @@ def view_places():
         else:
             filtered_places = []
             if filter_country and filter_weather:
-                filtered_places = model.binary_search_places(place_list, filter_country, filter_weather, 0,
-                                                             len(place_list) - 1)
+                filtered_places = model.binary_search_places(place_list, filter_country, filter_weather,)
             elif filter_country:
-                filtered_places = model.binary_search_places(place_list, filter_country, None, 0, len(place_list) - 1)
+                filtered_places = model.binary_search_places(place_list, filter_country, None)
 
             elif filter_weather:
-                filtered_places = model.binary_search_places(place_list, None, filter_weather, 0, len(place_list) - 1)
+                filtered_places = model.binary_search_places(place_list, None, filter_weather)
                 print(filtered_places)
 
 

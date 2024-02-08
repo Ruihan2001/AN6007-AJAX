@@ -62,35 +62,90 @@ def quickSort2(array, low, high, key=lambda x: x):
         quickSort2(array, pi + 1, high, key)
 
 
-def binary_search_places(places, target_country, target_weather, low, high):
+# def binary_search_places(places, target_country, target_weather, low, high):
+#
+#     quickSort2(places, 0, len(places) - 1, key=lambda x: (x.country.lower(), x.weather.lower()))
+#
+#     if low > high:
+#         return []
+#
+#     mid = (low + high) // 2
+#     country_matches = target_country is None or places[mid].country.lower() == target_country.lower()
+#     weather_matches = target_weather is None or places[mid].weather.lower() == target_weather.lower()
+#
+#     if country_matches and weather_matches:
+#         results = [places[mid]]
+#
+#         left = mid - 1
+#         while left >= low and places[left].country.lower() == target_country.lower() and places[left].weather.lower() == target_weather.lower():
+#             results.insert(0, places[left])
+#             left -= 1
+#
+#         right = mid + 1
+#         while right <= high and places[right].country.lower() == target_country.lower() and places[right].weather.lower() == target_weather.lower():
+#             results.append(places[right])
+#             right += 1
+#         return results
+#     elif places[mid].country.lower() < (target_country or '').lower() or places[mid].weather.lower() < (
+#                     target_weather or '').lower():
+#         return binary_search_places(places, target_country, target_weather, mid + 1, high)
+#     else:
+#         return binary_search_places(places, target_country, target_weather, low, mid - 1)
 
-    quickSort2(places, 0, len(places) - 1, key=lambda x: (x.country.lower(), x.weather.lower()))
-
-    if low > high:
-        return []
-
-    mid = (low + high) // 2
-    country_matches = target_country is None or places[mid].country.lower() == target_country.lower()
-    weather_matches = target_weather is None or places[mid].weather.lower() == target_weather.lower()
-
-    if country_matches and weather_matches:
-        results = [places[mid]]
-
-        left = mid - 1
-        while left >= low and places[left].country.lower() == target_country.lower() and places[left].weather.lower() == target_weather.lower():
-            results.insert(0, places[left])
-            left -= 1
-
-        right = mid + 1
-        while right <= high and places[right].country.lower() == target_country.lower() and places[right].weather.lower() == target_weather.lower():
-            results.append(places[right])
-            right += 1
-        return results
-    elif places[mid].country.lower() < (target_country or '').lower() or places[mid].weather.lower() < (
-                    target_weather or '').lower():
-        return binary_search_places(places, target_country, target_weather, mid + 1, high)
+def binary_search_places(places, target_country=None, target_weather=None):
+    if target_country is not None and target_weather is not None:
+        key = lambda x: (x.country.lower(), x.weather.lower())
+        target = (target_country.lower(), target_weather.lower())
+    elif target_country is not None:
+        key = lambda x: x.country.lower()
+        target = target_country.lower()
+    elif target_weather is not None:
+        key = lambda x: x.weather.lower()
+        target = target_weather.lower()
     else:
-        return binary_search_places(places, target_country, target_weather, low, mid - 1)
+        key = lambda x: (x.country.lower(), x.weather.lower())
+        target = None
+
+
+    quickSort2(places, 0, len(places) - 1, key=key)
+
+    if target is None:
+        return places
+
+    results = []
+    low, high = 0, len(places) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+        mid_val = key(places[mid])
+
+        if target_country and target_weather:
+            compare_result = (mid_val[0] < target[0]) or (mid_val[0] == target[0] and mid_val[1] < target[1])
+        else:
+            compare_result = mid_val < target
+
+        if compare_result:
+            low = mid + 1
+        else:
+            if mid_val == target:
+                results.append(places[mid])
+
+                expand_search(mid, places, results, key, target)
+            high = mid - 1
+
+    return results
+
+def expand_search(mid, places, results, key, target):
+
+    left = mid - 1
+    while left >= 0 and key(places[left]) == target:
+        results.insert(0, places[left])
+        left -= 1
+
+    right = mid + 1
+    while right < len(places) and key(places[right]) == target:
+        results.append(places[right])
+        right += 1
 
 
 # Vote
