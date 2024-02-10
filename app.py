@@ -130,7 +130,7 @@ def vote():
 
 @app.route('/analysis',methods=['GET','POST'])
 def analysis():
-    top_place_names, top_place_votes = model.findTop10(place_list)
+    top_place_names, top_place_votes = model.findTop3(place_list)
     map = model.prepareMap(place_list)
 
     total_places_num ,total_voted_places= model.cal_number_of_places_and_votes(place_list)

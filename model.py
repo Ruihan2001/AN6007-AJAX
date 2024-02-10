@@ -191,9 +191,9 @@ def createVote(user_name,voted_place,feedback,place_list,userdata):
 
 
 # top 10 voted country
-def findTop10(place_list):
+def findTop3(place_list):
     quickSort(place_list,0,len(place_list)-1,lambda x:str(x.total_votes))
-    top_place_list = place_list[-10:]
+    top_place_list = place_list[-3:]
     top_place_name = []
     top_place_votes = []
     for place in top_place_list:
@@ -278,14 +278,14 @@ def is_file_empty(file_path):
         return True  # 文件不存在或无法访问
 
 
-def find_or_create_user(userdata, username):
-    """查找或创建用户，返回用户实例"""
-    for user in userdata:
-        if user.username == username:
-            return user
-    new_user = User(username)
-    userdata.append(new_user)
-    return new_user
+# def find_or_create_user(userdata, username):
+#     """查找或创建用户，返回用户实例"""
+#     for user in userdata:
+#         if user.username == username:
+#             return user
+#     new_user = User(username)
+#     userdata.append(new_user)
+#     return new_user
 
 # Load data
 def load_data_from_files(user_file='users.txt', places_file='places.txt'):
