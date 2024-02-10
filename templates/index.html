@@ -223,19 +223,10 @@
 
 
                         messageElement = document.getElementById('message')
-
-                        const closeButton = document.createElement('button');
-                        closeButton.type = 'button';
-                        closeButton.className = 'close';
-                        closeButton.setAttribute('data-dismiss', 'alert');
-                        closeButton.innerHTML = '&times;';
-
-
                         messageElement.textContent = '';
-                        messageElement.appendChild(closeButton);
                         messageElement.appendChild(document.createTextNode("Place added successfully"));
 
-
+                        messageElement.classList.remove('alert-danger');
                         messageElement.classList.add('alert', 'alert-success');
 
                         updateCountrySelect();
@@ -256,10 +247,9 @@
 
 
                         messageElement.textContent = '';
-                        messageElement.appendChild(closeButton);
                         messageElement.appendChild(document.createTextNode("Error: This place already exists"));
 
-
+                        messageElement.classList.remove('alert-success');
                         messageElement.classList.add('alert', 'alert-danger');
 
                     }
@@ -297,19 +287,10 @@
 
 
                     messageElement = document.getElementById('message2')
-
-                    const closeButton = document.createElement('button');
-                    closeButton.type = 'button';
-                    closeButton.className = 'close';
-                    closeButton.setAttribute('data-dismiss', 'alert');
-                    closeButton.innerHTML = '&times;';
-
-
                     messageElement.textContent = '';
-                    messageElement.appendChild(closeButton);
                     messageElement.appendChild(document.createTextNode("Vote successfully"));
 
-
+                    messageElement.classList.remove('alert-danger');
                     messageElement.classList.add('alert', 'alert-success');
 
                     updateCountrySelect();
@@ -328,10 +309,10 @@
 
 
                     messageElement.textContent = '';
-                    messageElement.appendChild(closeButton);
+
                     messageElement.appendChild(document.createTextNode("Error: You have added this place before"));
 
-
+                    messageElement.classList.remove('alert-success');
                     messageElement.classList.add('alert', 'alert-danger');
                 }
             })
