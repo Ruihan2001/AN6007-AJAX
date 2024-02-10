@@ -1,3 +1,5 @@
+import threading
+
 from flask import Flask, redirect, url_for, request, jsonify, render_template, flash, json
 import model
 app = Flask(__name__)
@@ -134,7 +136,29 @@ def analysis():
     total_places_num ,total_voted_places= model.cal_number_of_places_and_votes(place_list)
     return render_template("analysis.html",top_place_names=top_place_names, top_place_votes=top_place_votes,map_data = map,total_voted_places=total_voted_places,total_places_num=total_places_num)
 
+def merge():
+    print("Excuting timed task...")
+    model.merge_and_clear_files()
+
+def run_schedule():
+    schedule.every(10).minutes.do(merge)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 if __name__ == '__main__':
+    import schedule
+    import time
     userdata, place_list = model.load_data_from_files()
+
+    t = threading.Thread(target=run_schedule)
+    t.start()
+
     app.run(port=4060)
+    #
+    # schedule.every(10).seconds.do(model.merge_and_clear_files)
+    #
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)

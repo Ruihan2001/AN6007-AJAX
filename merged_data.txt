@@ -1,0 +1,12 @@
+[VOTE_HISTORY]
+ruihan|chengdu|gaga
+1|Bangkok|22
+ruihan|Bangkok|good
+
+
+[PLACES]
+Bangkok|Thailand|Hot|123|2|22;good
+chengdu|china|bad||1|good
+Singapore|Singapore|Hot|hottt|0|
+tianjin|China|Nice||1|perfect
+
