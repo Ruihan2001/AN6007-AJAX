@@ -146,7 +146,7 @@ def merge():
     model.merge_and_clear_files()
 
 def run_schedule():
-    schedule.every(1).minutes.do(merge)
+    schedule.every(10).minutes.do(merge)
 
     while True:
         schedule.run_pending()
