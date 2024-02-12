@@ -106,25 +106,30 @@ def vote():
         user_name = request.form.get('username3')
         voted_place = request.form.get('votedplace')
         feedback = request.form.get('feedback')
+        print(type(user_name))
+        print(user_name)
+        if user_name =='':
+            return jsonify(error='Error: Place enter your username.')
         # vote_history_records = model.findUserVoteHistory(user_name,voted_place)
         # print(vote_history_records)
         # if vote_history_records:
             # flash("You already voted", 'danger')
             # return jsonify(error='You already voted')
-        
-        # flash("Feedback added successfully", 'success')
-        place_search = model.createVote(user_name, voted_place, feedback, place_list,userdata)
-        if place_search == 0:
-            return jsonify(error='Error: Place not found.')
-        elif place_search == 1:
-            return jsonify(error='Error: You already voted for this place')
         else:
-            print("vote info:",user_name,voted_place,feedback)
-            remark.append([user_name, voted_place, feedback])
-            model.update_users_file(remark)
-            # Update places.txt with the new state of all places
-            model.update_places_file(place_list)
-            return jsonify(success="Feedback added successfully")
+        # flash("Feedback added successfully", 'success')
+            place_search = model.createVote(user_name, voted_place, feedback, place_list,userdata)
+            print(place_search)
+            if place_search == 0:
+                return jsonify(error='Error: Place not found.')
+            elif place_search == 1:
+                return jsonify(error='Error: You already voted for this place')
+            else:
+                print("vote info:",user_name,voted_place,feedback)
+                remark.append([user_name, voted_place, feedback])
+                model.update_users_file(remark)
+                # Update places.txt with the new state of all places
+                model.update_places_file(place_list)
+                return jsonify(success="Feedback added successfully")
 
     return render_template("vote.html")
 
@@ -141,7 +146,7 @@ def merge():
     model.merge_and_clear_files()
 
 def run_schedule():
-    schedule.every(10).minutes.do(merge)
+    schedule.every(1).minutes.do(merge)
 
     while True:
         schedule.run_pending()
