@@ -148,7 +148,7 @@ def merge():
     model.merge_and_clear_files()
 
 def run_schedule():
-    schedule.every(10).minutes.do(merge)
+    schedule.every(1).minutes.do(merge)
 
     while True:
         schedule.run_pending()
@@ -167,13 +167,9 @@ if __name__ == '__main__':
 
     users_file_path = 'users.txt'
     places_file_path = 'places.txt'
-    files_to_check = [users_file_path, places_file_path]
-    should_merge = any(not is_file_empty(file_path) for file_path in files_to_check)
 
-    if should_merge:
-        model.merge_and_clear_files()
 
-    userdata, place_list = model.load_data_from_files()
+    userdata, place_list = model.load_data_from_files(users_file_path,places_file_path)
     t = threading.Thread(target=run_schedule)
     t.start()
 
