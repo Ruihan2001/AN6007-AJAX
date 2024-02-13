@@ -220,8 +220,6 @@
                     console.log(data);
                     if (data.success) {
 
-
-
                         messageElement = document.getElementById('message')
                         messageElement.textContent = '';
                         messageElement.appendChild(document.createTextNode("Place added successfully"));
@@ -233,8 +231,6 @@
                         updateWeatherSelect();
                         updatePlaceSelect();
                         fetchAndDisplayPlaces();
-
-
                     }
                     if (data.error) {
                         messageElement = document.getElementById('message')
@@ -284,8 +280,6 @@
             .then(data => {
                 console.log(data);
                 if (data.success) {
-
-
                     messageElement = document.getElementById('message2')
                     messageElement.textContent = '';
                     messageElement.appendChild(document.createTextNode("Vote successfully"));
@@ -297,10 +291,8 @@
                     updateWeatherSelect();
                     updatePlaceSelect();
                     fetchAndDisplayPlaces();
-
-
                 }
-                if (data.error) {
+                else if (data.error) {
                     const closeButton = document.createElement('button');
                     closeButton.type = 'button';
                     closeButton.className = 'close';
@@ -311,7 +303,39 @@
                     messageElement = document.getElementById('message2')
                     messageElement.textContent = '';
 
-                    messageElement.appendChild(document.createTextNode("Error: You have added this place before"));
+                    messageElement.appendChild(document.createTextNode("Error: Place enter your username."));
+
+                    messageElement.classList.remove('alert-success');
+                    messageElement.classList.add('alert', 'alert-danger');
+                }
+                else if (data.error2) {
+                    const closeButton = document.createElement('button');
+                    closeButton.type = 'button';
+                    closeButton.className = 'close';
+                    closeButton.setAttribute('data-dismiss', 'alert');
+                    closeButton.innerHTML = '&times;';
+
+
+                    messageElement = document.getElementById('message2')
+                    messageElement.textContent = '';
+
+                    messageElement.appendChild(document.createTextNode("Error: Place Not Found!"));
+
+                    messageElement.classList.remove('alert-success');
+                    messageElement.classList.add('alert', 'alert-danger');
+                }
+                else if (data.error3) {
+                    const closeButton = document.createElement('button');
+                    closeButton.type = 'button';
+                    closeButton.className = 'close';
+                    closeButton.setAttribute('data-dismiss', 'alert');
+                    closeButton.innerHTML = '&times;';
+
+
+                    messageElement = document.getElementById('message2')
+                    messageElement.textContent = '';
+
+                    messageElement.appendChild(document.createTextNode("Error: You already voted for this place!"));
 
                     messageElement.classList.remove('alert-success');
                     messageElement.classList.add('alert', 'alert-danger');

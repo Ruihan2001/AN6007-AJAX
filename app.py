@@ -122,9 +122,9 @@ def vote():
             print(place_search)
             if place_search == 0:
 
-                return jsonify(error='Error: Place not found.')
+                return jsonify(error2='Error: Place not found.')
             elif place_search == 1:
-                return jsonify(error='Error: You already voted for this place')
+                return jsonify(error3='Error: You already voted for this place')
             else:
                 print("vote info:",user_name,voted_place,feedback)
                 remark.append([user_name, voted_place, feedback])
