@@ -296,71 +296,43 @@ def is_file_empty(file_path):
 #     return new_user
 
 # Load data
-def load_data_from_files(user_file='users.txt', places_file='places.txt'):
+def load_data_from_files():
     userdata = []
     places = []
-
-    # 读取用户数据
-    if not is_file_empty(user_file):
-        with open(user_file, 'r', encoding='utf-8') as file:
-            for line in file:
-                username, place_name, feedback = line.strip().split('|')
-                quickSort(userdata, 0, len(userdata)-1, lambda x: x.username)
-                index = binary_search_all(userdata, 0, len(userdata)-1, username, lambda x: x.username if not isinstance(x, str) else x)
-                if not index:
-                    user = User(username)
-                    user.linked_places.append(UserLinkedPlace(place_name, feedback))
-                    userdata.append(user)
-                else:
-                    userdata[index[0]].linked_places.append(UserLinkedPlace(place_name, feedback))
-
-    # 处理 merged_data.txt，读取 VOTE_HISTORY 和 PLACES
     if not is_file_empty('merged_data.txt'):
         with open('merged_data.txt', 'r', encoding='utf-8') as file:
             content = file.read()
-            vote_history_index = content.find('[VOTE_HISTORY]')
-            places_index = content.find('[PLACES]')
+            vote_history_section = content.split('[VOTE_HISTORY]\n')[-1].split('\n\n[PLACES]')[0].strip().split('\n')
+            places_section = content.split('[PLACES]\n')[-1].strip().split('\n')
 
-            # 解析 VOTE_HISTORY 部分
-            if vote_history_index != -1 and (places_index == -1 or vote_history_index < places_index):
-                vote_history_content = content[vote_history_index + len('[VOTE_HISTORY]'):places_index if places_index != -1 else None].strip()
-                for line in vote_history_content.split('\n'):
-                    if line:
-                        username, place_name, feedback = line.strip().split('|')
-                        quickSort(userdata, 0, len(userdata) - 1, lambda x: x.username)
-                        index = binary_search_all(userdata, 0, len(userdata) - 1, username, lambda x: x.username if not isinstance(x, str) else x)
-                        if not index:
-                            user = User(username)
-                            user.linked_places.append(UserLinkedPlace(place_name, feedback))
-                            userdata.append(user)
-                        else:
-                            userdata[index[0]].linked_places.append(UserLinkedPlace(place_name, feedback))
 
-    # 根据 places.txt 是否为空决定读取来源
-    if not is_file_empty(places_file):
-        with open(places_file, 'r', encoding='utf-8') as file:
-            for line in file:
+            for line in vote_history_section:
+                if line.strip() == '':
+                    continue
+                username, place_name, feedback = line.strip().split('|')
+
+                user_index = binary_search_all(userdata, 0, len(userdata) - 1, username, key=lambda x: x.username if not isinstance(x, str) else x)
+                if not user_index:
+                    new_user = User(username)
+                    userdata.append(new_user)
+                    quickSort(userdata, 0, len(userdata) - 1, lambda x: x.username)  # 保持排序状态
+                else:
+                    new_user = userdata[user_index[0]]
+
+                new_user.linked_places.append(UserLinkedPlace(place_name, feedback))
+
+
+            for line in places_section:
+                if line.strip() == '':
+                    continue
                 name, country, weather, description, total_votes, feedback_str = line.strip().split('|')
                 feedback_list = feedback_str.split(';') if feedback_str else []
-                place = Place(name, country, weather, description)
-                place.total_votes = int(total_votes)
-                place.all_feedback = feedback_list
-                places.append(place)
-    elif places_index != -1:  # places.txt 为空且 merged_data.txt 中存在 [PLACES] 部分
-        places_content = content[places_index + len('[PLACES]'):].strip()
-        for line in places_content.split('\n'):
-            if line:
-                name, country, weather, description, total_votes, feedback_str = line.strip().split('|')
-                feedback_list = feedback_str.split(';') if feedback_str else []
-                place = Place(name, country, weather, description)
-                place.total_votes = int(total_votes)
-                place.all_feedback = feedback_list
-                places.append(place)
+                new_place = Place(name, country, weather, description)
+                new_place.total_votes = int(total_votes)
+                new_place.all_feedback = feedback_list
+                places.append(new_place)
 
     return userdata, places
-
-
-
 
 def update_places_file(place_list):
     with open('places.txt', 'w', encoding='utf-8') as file:
@@ -387,51 +359,65 @@ def update_users_file(remark):
             first_entry = remark[0]
             file.write(f"{first_entry[0]}|{first_entry[1]}|{first_entry[2]}")
 
-
 def merge_and_clear_files():
     try:
         with open('merged_data.txt', 'r', encoding='utf-8') as file:
-            content = file.read()
+            merged_content = file.readlines()
     except FileNotFoundError:
-        content = ''
+        merged_content = []
 
-    vote_history_exists = '[VOTE_HISTORY]' in content
-    places_exists = '[PLACES]' in content
 
-    new_vote_history_content = open('users.txt', 'r', encoding='utf-8').read().strip()
-    new_places_content = open('places.txt', 'r', encoding='utf-8').read().strip()
+    vote_history_section = []
+    places_section = []
+    current_section = None
+    for line in merged_content:
+        if '[VOTE_HISTORY]' in line:
+            current_section = vote_history_section
+        elif '[PLACES]' in line:
+            current_section = places_section
+        elif current_section is not None:
+            current_section.append(line.strip())
 
-    # 如果 VOTE_HISTORY 部分存在，找到插入点并追加内容
-    if vote_history_exists:
-        if places_exists:
-            # 如果 PLACES 也存在，插入 VOTE_HISTORY 之后，PLACES 之前
-            vote_history_index = content.index('[VOTE_HISTORY]') + len('[VOTE_HISTORY]\n')
-            places_index = content.index('[PLACES]')
-            updated_content = content[:vote_history_index] + new_vote_history_content + "\n" + content[vote_history_index:places_index].strip() + "\n\n" + content[places_index:]
-        else:
-            # 如果只有 VOTE_HISTORY 存在
-            vote_history_index = content.index('[VOTE_HISTORY]') + len('[VOTE_HISTORY]\n')
-            updated_content = content[:vote_history_index] + new_vote_history_content + "\n" + content[vote_history_index:].strip() + "\n"
-    else:
-        # 如果 VOTE_HISTORY 部分不存在，直接在文件末尾添加
-        updated_content = content + '[VOTE_HISTORY]\n' + new_vote_history_content + "\n"
 
-    # 处理 PLACES 部分
-    if places_exists:
-        places_index = updated_content.index('[PLACES]') + len('[PLACES]\n')
-        updated_content = updated_content[:places_index] + new_places_content + "\n" + updated_content[places_index:].strip()
-    elif new_places_content:
-        # 如果 PLACES 部分不存在但有新内容，添加到末尾
-        updated_content += '\n[PLACES]\n' + new_places_content + "\n"
+    new_vote_history_content = open('users.txt', 'r', encoding='utf-8').read().strip().split('\n')
+    new_places_content = open('places.txt', 'r', encoding='utf-8').read().strip().split('\n')
+
+
+    for new_vote in new_vote_history_content:
+        if new_vote and new_vote not in vote_history_section:
+            vote_history_section.append(new_vote)
+
+
+    updated_places = []
+    for new_place_line in new_places_content:
+        if new_place_line:
+            new_place_parts = new_place_line.split('|')
+            updated = False
+            for i, existing_place_line in enumerate(places_section):
+                existing_place_parts = existing_place_line.split('|')
+
+                if new_place_parts[0] == existing_place_parts[0] and new_place_parts[1] == existing_place_parts[1]:
+
+                    existing_feedback = set(existing_place_parts[-1].split(';'))
+                    new_feedback = set(new_place_parts[-1].split(';'))
+                    merged_feedback = existing_feedback.union(new_feedback)
+
+                    existing_place_parts[-2] = str(len(merged_feedback))
+                    existing_place_parts[-1] = ';'.join(merged_feedback)
+                    places_section[i] = '|'.join(existing_place_parts)
+                    updated = True
+                    break
+            if not updated:
+                places_section.append(new_place_line)
+
+    merged_data_content = '[VOTE_HISTORY]\n' + '\n'.join(vote_history_section) + '\n\n[PLACES]\n' + '\n'.join(places_section) + '\n'
 
     with open('merged_data.txt', 'w', encoding='utf-8') as file:
-        file.write(updated_content)
+        file.write(merged_data_content)
 
-    # 清空 users.txt 和 places.txt
     open('users.txt', 'w').close()
     open('places.txt', 'w').close()
 
-    print("Files were updated and cleared accordingly.")
 
 
 

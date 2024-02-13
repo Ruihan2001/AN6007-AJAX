@@ -1,3 +1,4 @@
+import os
 import threading
 
 from flask import Flask, redirect, url_for, request, jsonify, render_template, flash, json
@@ -152,11 +153,26 @@ def run_schedule():
         schedule.run_pending()
         time.sleep(1)
 
+def is_file_empty(file_path):
+    """检查文件是否为空"""
+    try:
+        return os.path.getsize(file_path) == 0
+    except OSError:
+        return True
+
 if __name__ == '__main__':
     import schedule
     import time
-    userdata, place_list = model.load_data_from_files()
 
+    users_file_path = 'users.txt'
+    places_file_path = 'places.txt'
+    files_to_check = [users_file_path, places_file_path]
+    should_merge = any(not is_file_empty(file_path) for file_path in files_to_check)
+
+    if should_merge:
+        model.merge_and_clear_files()
+
+    userdata, place_list = model.load_data_from_files()
     t = threading.Thread(target=run_schedule)
     t.start()
 
