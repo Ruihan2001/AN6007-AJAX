@@ -381,7 +381,7 @@
             data.forEach(function (placeStr) {
                 const placeDetails = placeStr.split(',');
                 const feedbacks = placeDetails[5].split(';'); // 使用`;`分割反馈列表
-        let feedbackHtml = feedbacks.map(feedback => `<p>${feedback}</p>`).join(''); // 为每条反馈创建段落
+        let feedbackHtml = feedbacks.map(feedback => `<p style="margin-bottom: 0">${feedback}</p>`).join(''); // 为每条反馈创建段落
 
         const $placeElement = $(`<div class="col-lg-4 col-md-6">
             <div class="img-box">
