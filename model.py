@@ -385,14 +385,12 @@ def update_users_file(remark):
             file.write(f"{first_entry[0]}|{first_entry[1]}|{first_entry[2]}")
 
 def merge_and_clear_files():
-    # 尝试读取 merged_data.txt 文件
     try:
         with open('merged_data.txt', 'r', encoding='utf-8') as file:
             content = file.read()
     except FileNotFoundError:
         content = ''
 
-    # 分离原有的 VOTE_HISTORY 和 PLACES 部分
     vote_history_index = content.find('[VOTE_HISTORY]')
     places_index = content.find('[PLACES]')
     original_vote_history = ''
@@ -403,31 +401,35 @@ def merge_and_clear_files():
     if places_index != -1:
         original_places = content[places_index:].strip()
 
-    # 读取新的 VOTE_HISTORY 和 PLACES 数据
     with open('users.txt', 'r', encoding='utf-8') as users_file:
         new_vote_history = users_file.read().strip()
+
     with open('places.txt', 'r', encoding='utf-8') as places_file:
         new_places_content = places_file.read().strip()
+    places_empty = not new_places_content
 
-    # 构造新的合并内容
     new_content = '[VOTE_HISTORY]\n'
     if original_vote_history:
-        new_content += original_vote_history.split('\n', 1)[1].strip() + '\n'  # 移除旧的标记行，只保留数据
+        new_content += original_vote_history.split('\n', 1)[1].strip() + '\n' if original_vote_history.count(
+            '\n') > 0 else ""
     new_content += new_vote_history + '\n'
-    if original_places:
-        new_content += '\n' + original_places.split('\n', 1)[0] + '\n'  # 保留旧的 PLACES 标记行
-        new_content += new_places_content  # 添加新的 PLACES 数据
 
-    # 写回更新后的内容到 merged_data.txt
+    if not places_empty:
+        if original_places:
+            new_content += '\n' + original_places.split('\n', 1)[0] + '\n' + new_places_content + '\n'
+        else:
+            new_content += '\n[PLACES]\n' + new_places_content + '\n'
+    else:
+        if original_places:
+            new_content += '\n' + original_places
+
     with open('merged_data.txt', 'w', encoding='utf-8') as merged_file:
         merged_file.write(new_content)
 
-    # 清空 users.txt 和 places.txt
     open('users.txt', 'w').close()
     open('places.txt', 'w').close()
 
     print("Files were updated and cleared accordingly.")
-
 
 
 def cal_number_of_places_and_votes(place_list):
