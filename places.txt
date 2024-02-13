@@ -1,0 +1,5 @@
+Bangkok|Thailand|Hot|123|4|22;good;good;good
+beijing|china|sunny||3|is beijing;good;good
+chengdu|china|bad||1|good
+Singapore|Singapore|Hot|hottt|0|
+tianjin|China|Nice||1|perfect

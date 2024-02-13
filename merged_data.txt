@@ -1,18 +1,10 @@
 [VOTE_HISTORY]
-chenxi|beijing|good
-cx|beijing|good
-cx|Bangkok|good
-gongxinyi|Bangkok|good
 ruihan|chengdu|gaga
 ruiyang|beijing|nice
 ruihan|Bangkok|good
 
+
 [PLACES]
-Bangkok|Thailand|Hot|123|4|22;good;good;good
-beijing|china|sunny||2|is beijing;good
-chengdu|china|bad||1|good
-Singapore|Singapore|Hot|hottt|0|
-tianjin|China|Nice||1|perfect
 Bangkok|Thailand|Hot|123|2|22;good
 chengdu|china|bad||1|good
 beijing|china|sunny||1|is beijing

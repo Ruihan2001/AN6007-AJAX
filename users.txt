@@ -1,0 +1,4 @@
+chenxi|beijing|good
+cx|beijing|good
+cx|Bangkok|good
+gongxinyi|Bangkok|good
