@@ -308,6 +308,7 @@
                     closeButton.innerHTML = '&times;';
 
 
+                    messageElement = document.getElementById('message2')
                     messageElement.textContent = '';
 
                     messageElement.appendChild(document.createTextNode("Error: You have added this place before"));
@@ -316,7 +317,7 @@
                     messageElement.classList.add('alert', 'alert-danger');
                 }
             })
-            .catch(error => console.error('Error:', error))
+            // .catch(error => console.error('Error:', error))
             .finally(() => {
                 voteButton.disabled = false;
             });

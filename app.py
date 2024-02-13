@@ -121,6 +121,7 @@ def vote():
             place_search = model.createVote(user_name, voted_place, feedback, place_list,userdata)
             print(place_search)
             if place_search == 0:
+
                 return jsonify(error='Error: Place not found.')
             elif place_search == 1:
                 return jsonify(error='Error: You already voted for this place')
