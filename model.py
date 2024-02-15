@@ -53,36 +53,6 @@ def quickSort2(array, low, high, key=lambda x: x):
         quickSort2(array, pi + 1, high, key)
 
 
-# def binary_search_places(places, target_country, target_weather, low, high):
-#
-#     quickSort2(places, 0, len(places) - 1, key=lambda x: (x.country.lower(), x.weather.lower()))
-#
-#     if low > high:
-#         return []
-#
-#     mid = (low + high) // 2
-#     country_matches = target_country is None or places[mid].country.lower() == target_country.lower()
-#     weather_matches = target_weather is None or places[mid].weather.lower() == target_weather.lower()
-#
-#     if country_matches and weather_matches:
-#         results = [places[mid]]
-#
-#         left = mid - 1
-#         while left >= low and places[left].country.lower() == target_country.lower() and places[left].weather.lower() == target_weather.lower():
-#             results.insert(0, places[left])
-#             left -= 1
-#
-#         right = mid + 1
-#         while right <= high and places[right].country.lower() == target_country.lower() and places[right].weather.lower() == target_weather.lower():
-#             results.append(places[right])
-#             right += 1
-#         return results
-#     elif places[mid].country.lower() < (target_country or '').lower() or places[mid].weather.lower() < (
-#                     target_weather or '').lower():
-#         return binary_search_places(places, target_country, target_weather, mid + 1, high)
-#     else:
-#         return binary_search_places(places, target_country, target_weather, low, mid - 1)
-
 def binary_search_places(places, target_country=None, target_weather=None):
     if target_country is not None and target_weather is not None:
         key = lambda x: (x.country.lower(), x.weather.lower())
@@ -300,7 +270,6 @@ def load_data_from_files(user_file='users.txt', places_file='places.txt'):
     userdata = []
     places = []
 
-    # 读取用户数据
     if not is_file_empty(user_file):
         with open(user_file, 'r', encoding='utf-8') as file:
             for line in file:
@@ -314,14 +283,12 @@ def load_data_from_files(user_file='users.txt', places_file='places.txt'):
                 else:
                     userdata[index[0]].linked_places.append(UserLinkedPlace(place_name, feedback))
 
-    # 处理 merged_data.txt，读取 VOTE_HISTORY 和 PLACES
     if not is_file_empty('merged_data.txt'):
         with open('merged_data.txt', 'r', encoding='utf-8') as file:
             content = file.read()
             vote_history_index = content.find('[VOTE_HISTORY]')
             places_index = content.find('[PLACES]')
 
-            # 解析 VOTE_HISTORY 部分
             if vote_history_index != -1 and (places_index == -1 or vote_history_index < places_index):
                 vote_history_content = content[vote_history_index + len('[VOTE_HISTORY]'):places_index if places_index != -1 else None].strip()
                 for line in vote_history_content.split('\n'):
@@ -336,7 +303,6 @@ def load_data_from_files(user_file='users.txt', places_file='places.txt'):
                         else:
                             userdata[index[0]].linked_places.append(UserLinkedPlace(place_name, feedback))
 
-    # 根据 places.txt 是否为空决定读取来源
     if not is_file_empty(places_file):
         with open(places_file, 'r', encoding='utf-8') as file:
             for line in file:
@@ -346,7 +312,7 @@ def load_data_from_files(user_file='users.txt', places_file='places.txt'):
                 place.total_votes = int(total_votes)
                 place.all_feedback = feedback_list
                 places.append(place)
-    elif places_index != -1:  # places.txt 为空且 merged_data.txt 中存在 [PLACES] 部分
+    elif places_index != -1:
         places_content = content[places_index + len('[PLACES]'):].strip()
         for line in places_content.split('\n'):
             if line:

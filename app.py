@@ -155,7 +155,6 @@ def run_schedule():
         time.sleep(1)
 
 def is_file_empty(file_path):
-    """检查文件是否为空"""
     try:
         return os.path.getsize(file_path) == 0
     except OSError:
