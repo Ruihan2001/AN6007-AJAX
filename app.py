@@ -72,14 +72,11 @@ def view_places():
                 filtered_places = model.binary_search_places(place_list, filter_country, filter_weather,)
             elif filter_country:
                 filtered_places = model.binary_search_places(place_list, filter_country, None)
-
             elif filter_weather:
                 filtered_places = model.binary_search_places(place_list, None, filter_weather)
-                print(filtered_places)
 
-
-        places_info = [f"{place.name},{place.country},{place.weather},{place.description},{place.total_votes}," + ';'.join(place.all_feedback) for place in filtered_places]
-
+        places_info = [f"{place.name},{place.country},{place.weather},{place.description},{place.total_votes}," + ';'.join(place.all_feedback) for place in set(filtered_places)]
+        # print(places_info)
         return jsonify(places_info)
     else:
         return jsonify([])

@@ -57,10 +57,10 @@ def binary_search_places(places, target_country=None, target_weather=None):
     if target_country is not None and target_weather is not None:
         key = lambda x: (x.country.lower(), x.weather.lower())
         target = (target_country.lower(), target_weather.lower())
-    elif target_country is not None:
+    elif target_country is not None and target_weather is None:
         key = lambda x: x.country.lower()
         target = target_country.lower()
-    elif target_weather is not None:
+    elif target_weather is not None and target_country is None:
         key = lambda x: x.weather.lower()
         target = target_weather.lower()
     else:
@@ -100,12 +100,14 @@ def expand_search(mid, places, results, key, target):
 
     left = mid - 1
     while left >= 0 and key(places[left]) == target:
-        results.insert(0, places[left])
+        if places[left] not in results:  # Check if not already added
+            results.insert(0, places[left])
         left -= 1
 
     right = mid + 1
     while right < len(places) and key(places[right]) == target:
-        results.append(places[right])
+        if places[right] not in results:  # Check if not already added
+            results.append(places[right])
         right += 1
 
 
