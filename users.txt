@@ -1,4 +1,4 @@
-chenxi|beijing|good
-cx|beijing|good
-cx|Bangkok|good
-gongxinyi|Bangkok|good
+chenxi|beijing|Impressed by the historical depth
+cx|beijing|Loved the local cuisine and vibrant culture
+cx|Bangkok|The nightlife was electrifying
+gongxinyi|Bangkok|Mesmerized by the temples and street food

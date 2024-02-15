@@ -1,5 +1,5 @@
-Bangkok|Thailand|Hot|123|4|22;good;good;good
-beijing|china|sunny||3|is beijing;good;good
-chengdu|china|bad||1|good
-Singapore|Singapore|Hot|hottt|0|
-tianjin|China|Nice||1|perfect
+Bangkok|Thailand|Hot|Beautiful city with vibrant street life|3|good;The nightlife was electrifying;Mesmerized by the temples and street food
+chengdu|china|Cold|Home to adorable pandas|1|gaga
+beijing|china|Sunny|Rich in history and culture|3|nice;Impressed by the historical depth;Loved the local cuisine and vibrant culture
+Singapore|Singapore|Hot|Clean and green city with modern skyline|0|
+tianjin|China|Nice|Known for its charming riverside scenery|0|
