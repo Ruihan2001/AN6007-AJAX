@@ -110,7 +110,7 @@ def vote():
         print(type(user_name))
         print(user_name)
         if user_name =='':
-            return jsonify(error='Error: Place enter your username.')
+            return jsonify(error='Error: Please enter your username.')
         # vote_history_records = model.findUserVoteHistory(user_name,voted_place)
         # print(vote_history_records)
         # if vote_history_records:
