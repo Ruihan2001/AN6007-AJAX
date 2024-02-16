@@ -249,6 +249,23 @@
                         messageElement.classList.add('alert', 'alert-danger');
 
                     }
+                    if (data.error2) {
+                        messageElement = document.getElementById('message')
+
+                        const closeButton = document.createElement('button');
+                        closeButton.type = 'button';
+                        closeButton.className = 'close';
+                        closeButton.setAttribute('data-dismiss', 'alert');
+                        closeButton.innerHTML = '&times;';
+
+
+                        messageElement.textContent = '';
+                        messageElement.appendChild(document.createTextNode("Error: Please enter all the information!"));
+
+                        messageElement.classList.remove('alert-success');
+                        messageElement.classList.add('alert', 'alert-danger');
+
+                    }
                 })
                 .catch(error => console.error('Error:', error));
 

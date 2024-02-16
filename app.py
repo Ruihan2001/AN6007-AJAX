@@ -20,17 +20,19 @@ def add_place():
         weather = request.form.get('weather')
         description = request.form.get('description')
         # print(user_name,place,country,weather,description)
+        if user_name =='' or place =='' or country =='' or weather =='' or description =='':
+            return jsonify(error2="Please enter all the information!")
+        else:
+            existing_place = next((p for p in place_list if p.name == place and p.country == country), None)
+            if existing_place:
+                flash("Error: A place with the same name and country already exists.",'danger')
+                return jsonify(error = 'Error')
+                # return jsonify({'status': 'error', 'message': 'A place with the same name and country already exists.'})
 
-        existing_place = next((p for p in place_list if p.name == place and p.country == country), None)
-        if existing_place:
-            flash("Error: A place with the same name and country already exists.",'danger')
-            return jsonify(error = 'Error')
-            # return jsonify({'status': 'error', 'message': 'A place with the same name and country already exists.'})
-
-        new_place = model.Place(place, country, weather, description)
-        place_list.append(new_place)
-        model.update_places_file(place_list)
-        return jsonify(success = 'Success!')
+            new_place = model.Place(place, country, weather, description)
+            place_list.append(new_place)
+            model.update_places_file(place_list)
+            return jsonify(success = 'Success!')
         # flash("Place added successfully",'success')
 
 @app.route('/country')
