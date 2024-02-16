@@ -38,6 +38,7 @@ Follow these steps to install and run our project:
 git clone https://github.com/Ruihan2001/AN6007-AJAX.git
 
 # Navigate to the project directory
+# You need to enter the same directory as requirements.txt
 cd AN6007-AJAX-main
 
 # Set up a virtual environment
