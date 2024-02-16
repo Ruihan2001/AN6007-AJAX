@@ -38,7 +38,7 @@ Follow these steps to install and run our project:
 git clone https://github.com/Ruihan2001/AN6007-AJAX.git
 
 # Navigate to the project directory
-cd AN6007-AJAX
+cd AN6007-AJAX-main
 
 # Set up a virtual environment
 python3 -m venv venv
